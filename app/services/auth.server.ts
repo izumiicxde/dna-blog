@@ -12,11 +12,11 @@ export type Credentials = {
 export const authenticator = new Authenticator<User | null>();
 
 authenticator.use(
-  new FormStrategy(async ({ form }) => {
-    const email = form.get("email") as string;
+  new FormStrategy(async ({ form }: { form: FormData }) => {
+    const identifier = form.get("identifier") as string;
     const password = form.get("password") as string;
 
-    return await login({ email, password });
+    return await login({ identifier, password });
   }),
   "use-auth"
 );
