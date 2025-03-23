@@ -14,7 +14,6 @@ export const prisma = global.__prisma;
 
 export const signup = async (req: z.infer<typeof signupSchema>) => {
   const { success, data, error } = signupSchema.safeParse(req);
-  console.log({ success, data, error });
 
   if (!success) throw new Error(JSON.stringify(error.flatten().fieldErrors));
 
@@ -24,7 +23,6 @@ export const signup = async (req: z.infer<typeof signupSchema>) => {
     },
   });
 
-  console.log({ user });
   if (user !== null) {
     if (user.email === data.email)
       throw new Error("user with this email already exists");
@@ -55,22 +53,21 @@ export const login = async ({
   identifier,
   password,
 }: Credentials): Promise<User | null> => {
-  console.log({ identifier, password });
   const result = loginSchema.safeParse({ identifier, password });
 
   if (!result.success)
     throw new Error(JSON.stringify(result.error.flatten().fieldErrors));
-
   const user = await prisma.user.findFirst({
     where: {
       OR: [{ email: identifier }, { username: identifier }],
     },
   });
+
   if (!user) throw new Error("invalid credentials");
   const isPasswordCorrect = await compareHash({
     hash: user.password,
     password,
   });
-  if (!isPasswordCorrect) return null;
+  if (!isPasswordCorrect) throw new Error("invalid credentials");
   return user;
 };
