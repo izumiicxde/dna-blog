@@ -16,8 +16,13 @@ import { getUserSession, sessionStorage } from "~/services/session.server";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "~/components/input-field";
 import { Button } from "~/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login } from "~/db.server";
+
+type ActionDataType = {
+  success: boolean;
+  message: string;
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   type LoginSchema = z.infer<typeof loginSchema>;
@@ -26,24 +31,44 @@ export async function action({ request }: ActionFunctionArgs) {
     const user = await login(body);
 
     if (!user)
-      return Response.json({ error: "Invalid credentials" }, { status: 400 });
+      return Response.json(
+        { success: false, message: "Invalid credentials" },
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
 
     const session = await getUserSession(request);
     session.set("user", user);
 
-    return redirect("/", {
-      headers: { "Set-Cookie": await sessionStorage.commitSession(session) },
-    });
+    return Response.json(
+      {
+        success: true,
+        message: "Login successful",
+      },
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await sessionStorage.commitSession(session),
+        },
+      }
+    );
   } catch (error) {
-    if (error instanceof Error)
-      return Response.json({ error: error.message }, { status: 400 });
-    return Response.json({ error: "login failed." }, { status: 500 });
+    return Response.json(
+      {
+        success: false,
+        message: error instanceof Error ? error.message : "Login failed",
+      },
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
 
 export default function Login() {
+  const fetcher = useFetcher();
   const navigator = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(
+    fetcher.state === "submitting"
+  );
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -55,35 +80,28 @@ export default function Login() {
 
   const onsubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
-      setIsSubmitting(true);
-
-      const response = await fetch("/login", {
+      fetcher.submit(values, {
         method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+        action: "/login",
+        encType: "application/json",
       });
-
-      if (response.redirected) {
-        navigator("/");
-        return;
-      }
-      if (response.ok) {
-        toast("Login successful");
-      } else {
-        const data = await response.json();
-        console.log(data);
-
-        throw new Error(data.message || "Login failed");
-      }
     } catch (error) {
       if (error instanceof Error) toast(error.message);
-    } finally {
-      setIsSubmitting(false);
+      else toast("login failed, try again later");
     }
   };
+
+  useEffect(() => {
+    if (fetcher.data) {
+      const data = fetcher.data as ActionDataType;
+      if (data.success) {
+        toast(data.message);
+        navigator("/");
+      } else {
+        toast(data.message || "Login failed");
+      }
+    }
+  }, [fetcher.data]);
 
   return (
     <div className="w-full max-w-sm flex flex-col gap-4 justify-center items-center ">
@@ -97,7 +115,7 @@ export default function Login() {
         </p>
       </div>
       <Form {...form}>
-        <RForm
+        <fetcher.Form
           onSubmit={form.handleSubmit(onsubmit)}
           className="flex flex-col gap-3 w-full"
         >
@@ -118,7 +136,7 @@ export default function Login() {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Logging in..." : "Login"}
           </Button>
-        </RForm>
+        </fetcher.Form>
       </Form>
     </div>
   );

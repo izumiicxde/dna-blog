@@ -54,9 +54,9 @@ export const login = async ({
   password,
 }: Credentials): Promise<User | null> => {
   const result = loginSchema.safeParse({ identifier, password });
-
   if (!result.success)
     throw new Error(JSON.stringify(result.error.flatten().fieldErrors));
+
   const user = await prisma.user.findFirst({
     where: {
       OR: [{ email: identifier }, { username: identifier }],
@@ -64,10 +64,12 @@ export const login = async ({
   });
 
   if (!user) throw new Error("invalid credentials");
+
   const isPasswordCorrect = await compareHash({
     hash: user.password,
     password,
   });
+
   if (!isPasswordCorrect) throw new Error("invalid credentials");
   return user;
 };
