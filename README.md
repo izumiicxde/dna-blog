@@ -8,16 +8,14 @@ DNA Blog is a feature-rich blogging platform that allows users to write, publish
 - 📖 **Read Blogs** – Browse and read blogs from various users.
 - 📝 **Edit & Delete** – Users can edit or delete their own blogs.
 - 🔍 **Search & Filter** – Find blogs based on keywords and categories.
-- ❤️ **Like & Comment** – Engage with blog posts by liking and commenting.
 - 🔐 **User Authentication** – Secure login and signup functionality.
 - 🎨 **Responsive UI** – A clean and user-friendly design for all devices.
 
 ## Tech Stack
 
-- **Frontend**: Next.js, React, TailwindCSS
-- **Backend**: Node.js, Express.js
-- **Database**: PostgreSQL / MongoDB (depending on implementation)
-- **Authentication**: NextAuth / Custom JWT
+- **Fullstack**: Remix, TailwindCSS
+- **Database**: PostgreSQL
+- **Authentication**: Session based auth
 - **Storage**: Cloudinary / Local file storage (for images)
 
 ## Installation & Setup
@@ -27,25 +25,27 @@ DNA Blog is a feature-rich blogging platform that allows users to write, publish
 Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/)
-- [PostgreSQL](https://www.postgresql.org/) or [MongoDB](https://www.mongodb.com/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ### Steps
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/dna-blog.git
+   git clone https://github.com/izumiicxde/dna-blog.git
    cd dna-blog
    ```
 2. Install dependencies:
    ```sh
    npm install
+   or
+   bun install
    ```
 3. Set up environment variables:
    - Create a `.env` file in the root directory.
    - Add the following variables:
      ```env
      DATABASE_URL=your_database_url
-     NEXTAUTH_SECRET=your_secret_key
+     SESSION_SECRET=something_here
      CLOUDINARY_URL=your_cloudinary_url (if using image uploads)
      ```
 4. Run database migrations (if using Prisma):
