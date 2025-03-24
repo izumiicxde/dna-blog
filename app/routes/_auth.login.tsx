@@ -1,18 +1,16 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import {
-  Link,
-  Form as RForm,
-  redirect,
-  useFetcher,
-  useNavigate,
-} from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { Link, redirect, useFetcher, useNavigate } from "@remix-run/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { loginSchema } from "utils/user.schema";
 import { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { authenticator } from "~/services/auth.server";
-import { getUserSession, sessionStorage } from "~/services/session.server";
+import {
+  getUserFromSession,
+  getUserSession,
+  sessionStorage,
+} from "~/services/session.server";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "~/components/input-field";
 import { Button } from "~/components/ui/button";
@@ -23,6 +21,12 @@ type ActionDataType = {
   success: boolean;
   message: string;
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await getUserFromSession(request);
+  if (userId) throw redirect("/");
+  return null;
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   type LoginSchema = z.infer<typeof loginSchema>;

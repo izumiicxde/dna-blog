@@ -1,10 +1,9 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Link,
   Form as RForm,
   useActionData,
   redirect,
-  useFetcher,
   useNavigate,
 } from "@remix-run/react";
 import { useForm } from "react-hook-form";
@@ -17,8 +16,11 @@ import InputField from "~/components/input-field";
 import { Button } from "~/components/ui/button";
 import { signup } from "~/db.server";
 import { useState } from "react";
-import { authenticator } from "~/services/auth.server";
-import { getUserSession, sessionStorage } from "~/services/session.server";
+import {
+  getUserFromSession,
+  getUserSession,
+  sessionStorage,
+} from "~/services/session.server";
 
 const signupFields = [
   {
@@ -52,6 +54,12 @@ const signupFields = [
     type: "password",
   },
 ];
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await getUserFromSession(request);
+  if (userId) throw redirect("/");
+  return null;
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   type SignupSchema = z.infer<typeof signupSchema>;
