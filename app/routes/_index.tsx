@@ -1,19 +1,18 @@
 import { data, redirect, type MetaFunction } from "@remix-run/node";
-import { getUserSession } from "~/services/session.server";
+import { getUserFromSession } from "~/services/session.server";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "DNA Blog" },
+    { name: "description", content: "Welcome to dna blog" },
   ];
 };
 
 export async function loader({ request }: { request: Request }) {
-  const session = await getUserSession(request);
-  const user = session.get("user");
-  if (!user) throw redirect("/login");
+  const userId = await getUserFromSession(request);
+  if (!userId) throw redirect("/login");
   return data(null);
 }
 export default function Index() {
-  return <div className="">Hello authenticated user?</div>;
+  return <div className=""></div>;
 }
