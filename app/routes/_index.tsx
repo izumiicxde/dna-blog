@@ -1,4 +1,5 @@
 import { data, redirect, type MetaFunction } from "@remix-run/node";
+import Navbar from "~/components/navbar";
 import { getUserSession } from "~/services/session.server";
 
 export const meta: MetaFunction = () => {
@@ -15,5 +16,9 @@ export async function loader({ request }: { request: Request }) {
   return data(null);
 }
 export default function Index() {
-  return <div className="">Hello authenticated user?</div>;
+  return (
+    <div className=" w-screen h-screen">
+      <Navbar />
+    </div>
+  );
 }
