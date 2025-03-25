@@ -5,13 +5,16 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import "./tailwind.css";
 import { Toaster } from "./components/ui/sonner";
 import { Button } from "./components/ui/button";
+import { getUserFromSession } from "./services/session.server";
+import Navbar from "./components/navbar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,7 +33,16 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await getUserFromSession(request);
+  return Response.json(
+    { success: userId ? true : false },
+    { status: userId?.id ? 200 : 400 }
+  );
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { success } = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -40,6 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Navbar success={success} />
         <Toaster />
         {children}
         <ScrollRestoration />
