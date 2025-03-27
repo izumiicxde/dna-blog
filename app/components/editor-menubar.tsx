@@ -1,7 +1,15 @@
 import { useCurrentEditor } from "@tiptap/react";
-import { Button } from "./ui/button";
 import { Bold } from "lucide-react";
+import { Button } from "./ui/button";
 
+type ButtonArrayType = {
+  name: string;
+  icon?: React.ReactElement;
+  text: string;
+  action: () => void;
+  disabled?: boolean;
+  isActive?: boolean;
+};
 export const MenuBar = () => {
   const { editor } = useCurrentEditor();
 
@@ -9,191 +17,113 @@ export const MenuBar = () => {
     return null;
   }
 
+  const buttons: ButtonArrayType[] = [
+    {
+      name: "bold",
+      text: "Bold",
+      icon: <Bold />,
+      action: () => editor.chain().focus().toggleBold().run(),
+    },
+    {
+      name: "italic",
+      text: "Italic",
+      action: () => editor.chain().focus().toggleItalic().run(),
+    },
+    {
+      name: "strike",
+      text: "Strike",
+      action: () => editor.chain().focus().toggleStrike().run(),
+    },
+    {
+      name: "code",
+      text: "Code",
+      action: () => editor.chain().focus().toggleCode().run(),
+    },
+    {
+      name: "clearMarks",
+      text: "Clear marks",
+      action: () => editor.chain().focus().unsetAllMarks().run(),
+    },
+    {
+      name: "clearNodes",
+      text: "Clear nodes",
+      action: () => editor.chain().focus().clearNodes().run(),
+    },
+    {
+      name: "paragraph",
+      text: "Paragraph",
+      action: () => editor.chain().focus().setParagraph().run(),
+    },
+    ...[1, 2, 3, 4, 5, 6].map((level) => ({
+      name: `heading-${level}`,
+      text: `H${level}`,
+      action: () => editor.chain().focus().toggleHeading({ level }).run(),
+      isActive: editor.isActive("heading", { level }),
+    })),
+    {
+      name: "bulletList",
+      text: "Bullet list",
+      action: () => editor.chain().focus().toggleBulletList().run(),
+    },
+    {
+      name: "orderedList",
+      text: "Ordered list",
+      action: () => editor.chain().focus().toggleOrderedList().run(),
+    },
+    {
+      name: "codeBlock",
+      text: "Code block",
+      action: () => editor.chain().focus().toggleCodeBlock().run(),
+    },
+    {
+      name: "blockquote",
+      text: "Blockquote",
+      action: () => editor.chain().focus().toggleBlockquote().run(),
+    },
+    {
+      name: "horizontalRule",
+      text: "Horizontal rule",
+      action: () => editor.chain().focus().setHorizontalRule().run(),
+    },
+    {
+      name: "hardBreak",
+      text: "Hard break",
+      action: () => editor.chain().focus().setHardBreak().run(),
+    },
+    {
+      name: "undo",
+      text: "Undo",
+      action: () => editor.chain().focus().undo().run(),
+      disabled: !editor.can().chain().focus().undo().run(),
+    },
+    {
+      name: "redo",
+      text: "Redo",
+      action: () => editor.chain().focus().redo().run(),
+      disabled: !editor.can().chain().focus().redo().run(),
+    },
+    {
+      name: "color",
+      text: "Purple",
+      action: () => editor.chain().focus().setColor("#958DF1").run(),
+      isActive: editor.isActive("textStyle", { color: "#958DF1" }),
+    },
+  ];
+
   return (
     <div className="py-8">
       <div className="flex flex-wrap gap-3">
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "is-active" : ""}
-        >
-          <Bold />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "is-active" : ""}
-        >
-          Italic
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={editor.isActive("strike") ? "is-active" : ""}
-        >
-          Strike
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          disabled={!editor.can().chain().focus().toggleCode().run()}
-          className={editor.isActive("code") ? "is-active" : ""}
-        >
-          Code
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-        >
-          Clear marks
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().clearNodes().run()}
-        >
-          Clear nodes
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={editor.isActive("paragraph") ? "is-active" : ""}
-        >
-          Paragraph
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-          }
-        >
-          H1
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-          }
-        >
-          H2
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 3 }) ? "is-active" : ""
-          }
-        >
-          H3
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 4 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 4 }) ? "is-active" : ""
-          }
-        >
-          H4
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 5 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 5 }) ? "is-active" : ""
-          }
-        >
-          H5
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 6 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 6 }) ? "is-active" : ""
-          }
-        >
-          H6
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "is-active" : ""}
-        >
-          Bullet list
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "is-active" : ""}
-        >
-          Ordered list
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive("codeBlock") ? "is-active" : ""}
-        >
-          Code block
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive("blockquote") ? "is-active" : ""}
-        >
-          Blockquote
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        >
-          Horizontal rule
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().setHardBreak().run()}
-        >
-          Hard break
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().chain().focus().undo().run()}
-        >
-          Undo
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().chain().focus().redo().run()}
-        >
-          Redo
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().setColor("#958DF1").run()}
-          className={
-            editor.isActive("textStyle", { color: "#958DF1" })
-              ? "is-active"
-              : ""
-          }
-        >
-          Purple
-        </Button>
+        {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
+          <Button
+            key={name}
+            variant="ghost"
+            onClick={action}
+            disabled={disabled}
+            className={isActive ? "is-active" : ""}
+          >
+            {icon || text}
+          </Button>
+        ))}
       </div>
     </div>
   );
