@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
+import Profile from "./profile";
 
 const Navbar = ({ success }: { success: boolean }) => {
   return (
@@ -26,9 +27,10 @@ const Navbar = ({ success }: { success: boolean }) => {
               <Button variant={"outline"} asChild>
                 <Link to={"/blog/create"}>Create Post</Link>
               </Button>
-              <Link to="/profile">
+
+              <Profile>
                 <div className="size-9 rounded-full bg-black cursor-pointer" />
-              </Link>
+              </Profile>
             </>
           ) : (
             <div className="flex items-center gap-2">
