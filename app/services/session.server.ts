@@ -11,6 +11,10 @@ export const sessionStorage = createCookieSessionStorage({
   },
 });
 
+export async function destroySession(request: Request) {
+  return sessionStorage.destroySession(await getUserSession(request));
+}
+
 export async function getUserSession(request: Request) {
   return sessionStorage.getSession(request.headers.get("Cookie"));
 }

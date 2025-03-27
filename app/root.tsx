@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetcher,
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
@@ -43,6 +44,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { success } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
