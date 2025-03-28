@@ -1,5 +1,18 @@
 import { useCurrentEditor } from "@tiptap/react";
-import { Bold } from "lucide-react";
+import {
+  Bold,
+  Code2,
+  CodeSquareIcon,
+  ItalicIcon,
+  List,
+  ListOrdered,
+  MoreHorizontalIcon,
+  Quote,
+  Redo2,
+  Strikethrough,
+  Text,
+  Undo2,
+} from "lucide-react";
 import { Button } from "./ui/button";
 
 type ButtonArrayType = {
@@ -27,16 +40,19 @@ export const MenuBar = () => {
     {
       name: "italic",
       text: "Italic",
+      icon: <ItalicIcon />,
       action: () => editor.chain().focus().toggleItalic().run(),
     },
     {
       name: "strike",
       text: "Strike",
+      icon: <Strikethrough />,
       action: () => editor.chain().focus().toggleStrike().run(),
     },
     {
       name: "code",
       text: "Code",
+      icon: <Code2 />,
       action: () => editor.chain().focus().toggleCode().run(),
     },
     {
@@ -52,6 +68,7 @@ export const MenuBar = () => {
     {
       name: "paragraph",
       text: "Paragraph",
+      icon: <Text />,
       action: () => editor.chain().focus().setParagraph().run(),
     },
     ...[1, 2, 3, 4, 5, 6].map((level) => ({
@@ -63,26 +80,31 @@ export const MenuBar = () => {
     {
       name: "bulletList",
       text: "Bullet list",
+      icon: <List />,
       action: () => editor.chain().focus().toggleBulletList().run(),
     },
     {
       name: "orderedList",
       text: "Ordered list",
+      icon: <ListOrdered />,
       action: () => editor.chain().focus().toggleOrderedList().run(),
     },
     {
       name: "codeBlock",
       text: "Code block",
-      action: () => editor.chain().focus().toggleCodeBlock().run(),
+      icon: <CodeSquareIcon />,
+      action: () => editor.commands.toggleCodeBlock(),
     },
     {
       name: "blockquote",
       text: "Blockquote",
+      icon: <Quote />,
       action: () => editor.chain().focus().toggleBlockquote().run(),
     },
     {
       name: "horizontalRule",
       text: "Horizontal rule",
+      icon: <MoreHorizontalIcon />,
       action: () => editor.chain().focus().setHorizontalRule().run(),
     },
     {
@@ -93,25 +115,21 @@ export const MenuBar = () => {
     {
       name: "undo",
       text: "Undo",
+      icon: <Undo2 />,
       action: () => editor.chain().focus().undo().run(),
       disabled: !editor.can().chain().focus().undo().run(),
     },
     {
       name: "redo",
       text: "Redo",
+      icon: <Redo2 />,
       action: () => editor.chain().focus().redo().run(),
       disabled: !editor.can().chain().focus().redo().run(),
-    },
-    {
-      name: "color",
-      text: "Purple",
-      action: () => editor.chain().focus().setColor("#958DF1").run(),
-      isActive: editor.isActive("textStyle", { color: "#958DF1" }),
     },
   ];
 
   return (
-    <div className="py-8">
+    <div className="py-8 bg-gray-300/10">
       <div className="flex flex-wrap gap-3">
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
