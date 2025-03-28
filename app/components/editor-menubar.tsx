@@ -14,6 +14,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { useEditorStore } from "utils/store";
 
 type ButtonArrayType = {
   name: string;
@@ -29,7 +30,6 @@ export const MenuBar = () => {
   if (!editor) {
     return null;
   }
-
   const buttons: ButtonArrayType[] = [
     {
       name: "bold",
@@ -71,12 +71,20 @@ export const MenuBar = () => {
       icon: <Text />,
       action: () => editor.chain().focus().setParagraph().run(),
     },
-    ...[1, 2, 3, 4, 5, 6].map((level) => ({
+    ...([1, 2, 3, 4, 5, 6] as const).map((level) => ({
       name: `heading-${level}`,
       text: `H${level}`,
-      action: () => editor.chain().focus().toggleHeading({ level }).run(),
-      isActive: editor.isActive("heading", { level }),
+      action: () =>
+        editor
+          .chain()
+          .focus()
+          .toggleHeading({ level: level as 1 | 2 | 3 | 4 | 5 | 6 })
+          .run(),
+      isActive: editor.isActive("heading", {
+        level: level as 1 | 2 | 3 | 4 | 5 | 6,
+      }),
     })),
+
     {
       name: "bulletList",
       text: "Bullet list",
@@ -128,6 +136,9 @@ export const MenuBar = () => {
     },
   ];
 
+  const logData = () => {
+    console.log({ html: editor?.getHTML(), json: editor.getJSON() });
+  };
   return (
     <div className="py-8 bg-gray-300/10">
       <div className="flex flex-wrap gap-3">
@@ -142,6 +153,7 @@ export const MenuBar = () => {
             {icon || text}
           </Button>
         ))}
+        <Button onClick={logData}>Log Data</Button>
       </div>
     </div>
   );

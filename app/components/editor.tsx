@@ -5,22 +5,12 @@ import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { MenuBar } from "./editor-menubar";
 import {
-  Bold,
-  Code,
-  Italic,
-  BulletList,
-  Document,
-  Paragraph,
-  HorizontalRuler,
-  Text,
-  Heading,
-  OrderedList,
   Image,
-  CodeBlock,
   CodeBlockLowlight,
   createLowlight,
   all,
 } from "~/../utils/editor-imports";
+import { useEditorStore } from "utils/store";
 
 // highlighting registration
 const lowlight = createLowlight(all);
@@ -38,39 +28,38 @@ const extensions = [
       keepAttributes: false,
     },
   }),
-  Bold,
-  Code,
-  Italic,
-  Document,
-  Paragraph,
-  HorizontalRuler,
-  Text,
-  Heading,
+
   Image,
   CodeBlockLowlight.configure({
     lowlight,
     languageClassPrefix: "language-",
   }),
-  BulletList,
-  OrderedList,
-  ListItem,
 ];
 
-const content = ``;
-
-export default () => {
+const Editor = () => {
+  const { setEditor } = useEditorStore();
   return (
-    <EditorProvider
-      immediatelyRender={false}
-      slotBefore={<MenuBar />}
-      extensions={extensions}
-      content={content}
-      editorProps={{
-        attributes: {
-          class:
-            "p-3 h-full min-h-[30vh] prose-sm overflow-y-scroll max-h-[35vh] ",
-        },
-      }}
-    ></EditorProvider>
+    <>
+      <EditorProvider
+        onCreate={({ editor }) => {
+          setEditor(editor);
+        }}
+        onUpdate={({ editor }) => {
+          setEditor(editor);
+        }}
+        immediatelyRender={false}
+        slotBefore={<MenuBar />}
+        extensions={extensions}
+        content={""}
+        editorProps={{
+          attributes: {
+            class:
+              "p-3 h-full min-h-[30vh] prose-sm overflow-y-scroll max-h-[35vh] ",
+          },
+        }}
+      ></EditorProvider>
+    </>
   );
 };
+
+export default Editor;
