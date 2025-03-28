@@ -112,7 +112,7 @@
 
 .tiptap h1 {
   font-size: 1.8rem;
-  font-weight: bolder;
+  @apply font-black;
 }
 
 .tiptap h2 {

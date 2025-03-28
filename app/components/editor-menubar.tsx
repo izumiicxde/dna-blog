@@ -3,6 +3,7 @@ import {
   Bold,
   Code2,
   CodeSquareIcon,
+  Image,
   ItalicIcon,
   List,
   ListOrdered,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEditorStore } from "utils/store";
+import { useCallback } from "react";
 
 type ButtonArrayType = {
   name: string;
@@ -136,9 +138,13 @@ export const MenuBar = () => {
     },
   ];
 
-  const logData = () => {
-    console.log({ html: editor?.getHTML(), json: editor.getJSON() });
-  };
+  const addImage = useCallback(() => {
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
   return (
     <div className="py-8 bg-gray-300/10">
       <div className="flex flex-wrap gap-3">
@@ -153,7 +159,9 @@ export const MenuBar = () => {
             {icon || text}
           </Button>
         ))}
-        <Button onClick={logData}>Log Data</Button>
+        <Button onClick={addImage} variant={"ghost"} size={"icon"}>
+          <Image />
+        </Button>
       </div>
     </div>
   );

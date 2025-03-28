@@ -13,4 +13,5 @@ export { default as OrderedList } from "@tiptap/extension-ordered-list";
 export { default as Image } from "@tiptap/extension-image";
 export { default as CodeBlock } from "@tiptap/extension-code-block";
 export { default as CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+export { default as Dropcursor } from "@tiptap/extension-dropcursor";
 export { all, createLowlight } from "lowlight";

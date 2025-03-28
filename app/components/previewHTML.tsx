@@ -1,11 +1,15 @@
-import { useEditorStore } from "utils/store";
+import { useEditorContentStore, useEditorStore } from "utils/store";
 
 const PreviewHTML = () => {
-  const { editor } = useEditorStore();
-  console.log(editor);
+  // const { editor } = useEditorStore();
+  const { content } = useEditorContentStore();
   return (
-    <div className="border-4 border-red-500">
-      <>{editor?.getHTML()}</>
+    <div className="">
+      {/* CONTENT */}
+      <div
+        dangerouslySetInnerHTML={{ __html: content }}
+        className="prose"
+      ></div>
     </div>
   );
 };
