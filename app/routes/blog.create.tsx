@@ -32,7 +32,6 @@ const CreateBlog = () => {
       <div className="px-5 lg:pr-20">
         {isPreview ? (
           <div className="w-full h-auto p-5 ">
-            hello
             <PreviewHTML />
           </div>
         ) : (
