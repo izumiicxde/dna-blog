@@ -9,9 +9,12 @@ import { Label } from "~/components/ui/label";
 import { Form as RForm } from "@remix-run/react";
 import { useCurrentEditor } from "@tiptap/react";
 import PreviewHTML from "~/components/previewHTML";
+import { useBlogContentStore } from "utils/store";
+
 
 const CreateBlog = () => {
   const [isPreview, setIsPreview] = useState(false);
+  const {content,setContent} = useBlogContentStore()
   const form = useForm();
 
   const onsubmit = async (values: any) => {};
@@ -56,6 +59,10 @@ const CreateBlog = () => {
               </div>
               <Input
                 type="text"
+                onChange={(e)=> {
+                  setContent({...content, title:e.target.value })
+                }}
+                value={content.title}
                 placeholder="New post title goes here...."
                 className="w-full h-32 !text-5xl font-black placeholder:text-5xl p-4 rounded-lg focus:outline-none focus:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0 focus-visible:ring-none outline-none ring-0 border-none shadow-none"
               />

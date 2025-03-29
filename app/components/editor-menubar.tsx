@@ -15,7 +15,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEditorStore } from "utils/store";
+
 import { useCallback } from "react";
 
 type ButtonArrayType = {
@@ -146,8 +146,8 @@ export const MenuBar = () => {
     }
   }, [editor]);
   return (
-    <div className="py-8 bg-gray-300/10">
-      <div className="flex flex-wrap gap-3">
+    <div className="py-8 bg-gray-200/20">
+      <div className="flex flex-wrap gap-3 px-10">
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
             key={name}
