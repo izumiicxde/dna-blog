@@ -7,6 +7,7 @@ import { MenuBar } from "./editor-menubar";
 import {
   Image,
   CodeBlockLowlight,
+  Placeholder,
   Dropcursor,
   createLowlight,
   all,
@@ -39,6 +40,15 @@ const extensions = [
   CodeBlockLowlight.configure({
     lowlight,
     languageClassPrefix: "language-",
+  }),
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") {
+        return "What's the title?";
+      }
+
+      return "Write your blog content here....";
+    },
   }),
 ];
 
@@ -119,7 +129,7 @@ const Editor = () => {
           handleDrop: handleImageDrop,
           attributes: {
             class:
-              "p-3 pt-16 h-full min-h-[30vh]  prose-sm overflow-y-scroll relative",
+              "p-3 pt-8 h-full min-h-[30vh]  prose-sm overflow-y-scroll relative",
           },
         }}
       ></EditorProvider>

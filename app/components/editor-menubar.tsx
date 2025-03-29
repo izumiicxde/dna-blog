@@ -7,12 +7,11 @@ import {
   ItalicIcon,
   List,
   ListOrdered,
-  MoreHorizontalIcon,
   Quote,
   Redo2,
+  RulerIcon,
   Strikethrough,
   Text,
-  Underline,
   Undo2,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -69,16 +68,12 @@ export const MenuBar = () => {
       action: () => editor.commands.toggleCodeBlock(),
       isActive: editor.isActive("codeBlock"),
     },
-    // {
-    //   name: "clearMarks",
-    //   text: "Clear marks",
-    //   action: () => editor.chain().focus().unsetAllMarks().run(),
-    // },
-    // {
-    //   name: "clearNodes",
-    //   text: "Clear nodes",
-    //   action: () => editor.chain().focus().clearNodes().run(),
-    // },
+    {
+      name: "image",
+      text: "Image",
+      icon: <Image />,
+      action: () => {},
+    },
     {
       name: "paragraph",
       text: "Paragraph",
@@ -118,9 +113,9 @@ export const MenuBar = () => {
       action: () => editor.chain().focus().toggleBlockquote().run(),
     },
     {
-      name: "horizontalRule",
-      text: "Horizontal rule",
-      icon: <MoreHorizontalIcon />,
+      name: "horizontalRuler",
+      text: "Horizontal ruler",
+      icon: <RulerIcon />,
       action: () => editor.chain().focus().setHorizontalRule().run(),
     },
 
@@ -148,8 +143,8 @@ export const MenuBar = () => {
     }
   }, [editor]);
   return (
-    <div className="  sticky top-0 bg-white z-30 ">
-      <div className="flex flex-wrap gap-3 justify-center">
+    <div className="  sticky top-16 py-4 bg-white z-30 ">
+      <div className="flex flex-wrap gap-3 px-2">
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
             key={name}
@@ -161,9 +156,6 @@ export const MenuBar = () => {
             {icon || text}
           </Button>
         ))}
-        <Button onClick={addImage} variant={"ghost"} size={"icon"}>
-          <Image />
-        </Button>
       </div>
     </div>
   );

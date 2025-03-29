@@ -1,10 +1,8 @@
 import { Outlet } from "@remix-run/react";
-import Navbar from "~/components/navbar";
 
 const CreateLayout = () => {
   return (
-    <div className="w-screen overflow-x-hidden h-screen ">
-      {/* <Navbar /> */}
+    <div className="w-full h-auto">
       <Outlet />
     </div>
   );
