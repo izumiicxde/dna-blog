@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Editor } from "@tiptap/react";
+import { persist } from 'zustand/middleware';
 
 type EditorStore = {
   editor: Editor | null;
@@ -11,12 +12,29 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setEditor: (editor) => set({ editor }),
 }));
 
+
+interface Content {
+    title: string;
+    body: string;
+    coverImage: string | URL;
+}
 interface EditorContentStore {
-  content: string;
-  setContent: (content: string) => void;
+  content:Content;
+  setContent: (content: Content) => void;
 }
 
-export const useEditorContentStore = create<EditorContentStore>((set) => ({
-  content: "",
-  setContent: (content: string) => set({ content }),
-}));
+export const useBlogContentStore = create<EditorContentStore>()(
+  persist(
+    (set) => ({
+      content: {
+        title: "",
+        body: "",
+        coverImage:"",
+      },
+      setContent: (content: Content) => set({ content }),
+    }),
+    {
+      name: 'blog-content-store',
+    }
+  )
+);

@@ -29,7 +29,7 @@ export const socials = [
   {
     name: "Instagram",
     icon: Instagram,
-    link: "/socials/instagram",
+    link: "/socials/insta",  
   },
   {
     name: "LinkedIn",

@@ -1,8 +1,8 @@
-import { useEditorContentStore, useEditorStore } from "utils/store";
+import { useBlogContentStore } from "utils/store";
 
 const PreviewHTML = () => {
   // const { editor } = useEditorStore();
-  const { content } = useEditorContentStore();
+  const { content } = useBlogContentStore();
   return (
     <div className="">
       {/* CONTENT */}
