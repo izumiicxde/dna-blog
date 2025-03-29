@@ -45,37 +45,6 @@ const extensions = [
 const Editor = () => {
   const { setEditor } = useEditorStore();
   const { setContent, content } = useBlogContentStore();
-  return (
-    <>
-      <EditorProvider
-        onCreate={({ editor }) => {
-          setEditor(editor);
-        }}
-        onUpdate={({ editor }) => {
-          setEditor(editor);
-        }}
-        immediatelyRender={false}
-        slotBefore={<MenuBar />}
-        extensions={extensions}
-        content={content}
-        onBlur={({ editor }) => {
-          setContent({...content, body: editor?.getHTML()});
-        }}
-        editorProps={{
-          handleDrop: handleImageDrop,
-          attributes: {
-            class:
-              "p-3 h-full min-h-[30vh] prose-sm overflow-y-scroll max-h-[35vh] ",
-          },
-        }}
-      ></EditorProvider>
-    </>
-  );
-};
-
-export default Editor;
-  const { editor, setEditor } = useEditorStore();
-  const { setContent, content } = useEditorContentStore();
 
   function handleImageDrop(
     view: EditorView,
@@ -108,7 +77,6 @@ export default Editor;
           } else {
             //TODO: upload the image to the server.
             toast("valid image uploaded");
-            editor?.chain().focus().setImage({ src: img.src }).run();
             // uploadImage(file)
             //   .then((response) => {
             //     console.log("Image uploaded:", response);
@@ -143,7 +111,7 @@ export default Editor;
         extensions={extensions}
         content={content}
         onBlur={({ editor }) => {
-          setContent(editor?.getHTML());
+          setContent({ ...content, body: editor?.getHTML() });
         }}
         editorProps={{
           handleDrop: handleImageDrop,
