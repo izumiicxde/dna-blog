@@ -148,7 +148,7 @@ export const MenuBar = () => {
     }
   }, [editor]);
   return (
-    <div className="  sticky top-14 bg-white z-30 ">
+    <div className="  sticky top-0 bg-white z-30 ">
       <div className="flex flex-wrap gap-3 justify-center">
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
