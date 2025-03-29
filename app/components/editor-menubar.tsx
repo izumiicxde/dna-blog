@@ -12,6 +12,7 @@ import {
   Redo2,
   Strikethrough,
   Text,
+  Underline,
   Undo2,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -38,24 +39,35 @@ export const MenuBar = () => {
       text: "Bold",
       icon: <Bold />,
       action: () => editor.chain().focus().toggleBold().run(),
+      isActive: editor.isActive("bold"),
     },
     {
       name: "italic",
       text: "Italic",
       icon: <ItalicIcon />,
       action: () => editor.chain().focus().toggleItalic().run(),
+      isActive: editor.isActive("italic"),
     },
     {
       name: "strike",
       text: "Strike",
       icon: <Strikethrough />,
       action: () => editor.chain().focus().toggleStrike().run(),
+      isActive: editor.isActive("strike"),
     },
     {
       name: "code",
       text: "Code",
       icon: <Code2 />,
       action: () => editor.chain().focus().toggleCode().run(),
+      isActive: editor.isActive("code"),
+    },
+    {
+      name: "codeBlock",
+      text: "Code block",
+      icon: <CodeSquareIcon />,
+      action: () => editor.commands.toggleCodeBlock(),
+      isActive: editor.isActive("codeBlock"),
     },
     {
       name: "clearMarks",
@@ -98,12 +110,6 @@ export const MenuBar = () => {
       text: "Ordered list",
       icon: <ListOrdered />,
       action: () => editor.chain().focus().toggleOrderedList().run(),
-    },
-    {
-      name: "codeBlock",
-      text: "Code block",
-      icon: <CodeSquareIcon />,
-      action: () => editor.commands.toggleCodeBlock(),
     },
     {
       name: "blockquote",
@@ -151,10 +157,10 @@ export const MenuBar = () => {
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
             key={name}
-            variant="ghost"
+            variant={"ghost"}
             onClick={action}
             disabled={disabled}
-            className={isActive ? "is-active" : ""}
+            className={isActive ? "bg-gray-400/20" : ""}
           >
             {icon || text}
           </Button>

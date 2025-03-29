@@ -102,14 +102,16 @@ const Editor = () => {
       <EditorProvider
         onCreate={({ editor }) => {
           setEditor(editor);
+          editor?.commands.setContent(content.body);
         }}
         onUpdate={({ editor }) => {
           setEditor(editor);
+          setContent({ ...content, body: editor?.getHTML() });
         }}
         immediatelyRender={false}
         slotBefore={<MenuBar />}
         extensions={extensions}
-        content={content}
+        content={content.body}
         onBlur={({ editor }) => {
           setContent({ ...content, body: editor?.getHTML() });
         }}
