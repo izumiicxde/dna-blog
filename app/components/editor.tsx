@@ -98,7 +98,7 @@ const Editor = () => {
   }
 
   return (
-    <>
+    <div className="w-full h-auto relative">
       <EditorProvider
         onCreate={({ editor }) => {
           setEditor(editor);
@@ -119,11 +119,11 @@ const Editor = () => {
           handleDrop: handleImageDrop,
           attributes: {
             class:
-              "p-3 h-full min-h-[30vh] prose-sm overflow-y-scroll max-h-[35vh] ",
+              "p-3 pt-16 h-full min-h-[30vh]  prose-sm overflow-y-scroll relative",
           },
         }}
       ></EditorProvider>
-    </>
+    </div>
   );
 };
 

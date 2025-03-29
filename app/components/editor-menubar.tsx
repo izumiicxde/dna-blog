@@ -69,16 +69,16 @@ export const MenuBar = () => {
       action: () => editor.commands.toggleCodeBlock(),
       isActive: editor.isActive("codeBlock"),
     },
-    {
-      name: "clearMarks",
-      text: "Clear marks",
-      action: () => editor.chain().focus().unsetAllMarks().run(),
-    },
-    {
-      name: "clearNodes",
-      text: "Clear nodes",
-      action: () => editor.chain().focus().clearNodes().run(),
-    },
+    // {
+    //   name: "clearMarks",
+    //   text: "Clear marks",
+    //   action: () => editor.chain().focus().unsetAllMarks().run(),
+    // },
+    // {
+    //   name: "clearNodes",
+    //   text: "Clear nodes",
+    //   action: () => editor.chain().focus().clearNodes().run(),
+    // },
     {
       name: "paragraph",
       text: "Paragraph",
@@ -123,11 +123,7 @@ export const MenuBar = () => {
       icon: <MoreHorizontalIcon />,
       action: () => editor.chain().focus().setHorizontalRule().run(),
     },
-    {
-      name: "hardBreak",
-      text: "Hard break",
-      action: () => editor.chain().focus().setHardBreak().run(),
-    },
+
     {
       name: "undo",
       text: "Undo",
@@ -152,8 +148,8 @@ export const MenuBar = () => {
     }
   }, [editor]);
   return (
-    <div className="py-8 bg-gray-200/20">
-      <div className="flex flex-wrap gap-3 px-10">
+    <div className="  sticky top-14 bg-white z-30 ">
+      <div className="flex flex-wrap gap-3 justify-center">
         {buttons.map(({ name, text, icon, action, disabled, isActive }) => (
           <Button
             key={name}
