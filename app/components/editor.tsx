@@ -11,7 +11,7 @@ import {
   createLowlight,
   all,
 } from "~/../utils/editor-imports";
-import { useEditorContentStore, useEditorStore } from "utils/store";
+import { useBlogContentStore, useEditorStore } from "utils/store";
 import { EditorView } from "@tiptap/pm/view";
 import { Slice } from "@tiptap/pm/model";
 import { toast } from "sonner";
@@ -43,6 +43,37 @@ const extensions = [
 ];
 
 const Editor = () => {
+  const { setEditor } = useEditorStore();
+  const { setContent, content } = useBlogContentStore();
+  return (
+    <>
+      <EditorProvider
+        onCreate={({ editor }) => {
+          setEditor(editor);
+        }}
+        onUpdate={({ editor }) => {
+          setEditor(editor);
+        }}
+        immediatelyRender={false}
+        slotBefore={<MenuBar />}
+        extensions={extensions}
+        content={content}
+        onBlur={({ editor }) => {
+          setContent({...content, body: editor?.getHTML()});
+        }}
+        editorProps={{
+          handleDrop: handleImageDrop,
+          attributes: {
+            class:
+              "p-3 h-full min-h-[30vh] prose-sm overflow-y-scroll max-h-[35vh] ",
+          },
+        }}
+      ></EditorProvider>
+    </>
+  );
+};
+
+export default Editor;
   const { editor, setEditor } = useEditorStore();
   const { setContent, content } = useEditorContentStore();
 
