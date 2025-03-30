@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Editor } from "@tiptap/react";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { BlogSchema } from "./blog.schema";
 
 type EditorStore = {
   editor: Editor | null;
@@ -12,25 +13,30 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setEditor: (editor) => set({ editor }),
 }));
 
-interface Content {
-  title: string;
-  body: string;
-  coverImage: string;
-}
+// interface Content {
+//   title: string;
+//   body: string;
+//   coverImage: string;
+// }
 interface EditorContentStore {
-  content: Content;
-  setContent: (content: Content) => void;
+  content: BlogSchema;
+  setContent: (content: BlogSchema) => void;
+  clearContent: () => void;
 }
+const initialBlogContent = {
+  title: "",
+  body: "",
+  coverImage: "",
+};
 
 export const useBlogContentStore = create<EditorContentStore>()(
   persist(
     (set) => ({
-      content: {
-        title: "",
-        body: "",
-        coverImage: "",
+      content: initialBlogContent,
+      setContent: (content: BlogSchema) => set({ content }),
+      clearContent: () => {
+        set({ content: initialBlogContent });
       },
-      setContent: (content: Content) => set({ content }),
     }),
     {
       name: "blog-content-store",
