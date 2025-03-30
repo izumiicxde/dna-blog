@@ -1,7 +1,9 @@
 import { PrismaClient, User } from "@prisma/client";
+import { blogSchema, BlogSchema } from "utils/blog.schema";
 import { compareHash, hashPassword } from "utils/password";
 import { loginSchema, signupSchema } from "utils/user.schema";
 import { z } from "zod";
+import { getUserFromSession } from "./services/session.server";
 
 declare global {
   var __prisma: PrismaClient;
@@ -72,4 +74,15 @@ export const login = async ({
 
   if (!isPasswordCorrect) throw new Error("invalid credentials");
   return user;
+};
+
+export const createBlog = async (BlogData: BlogSchema) => {
+  const { success, data, error } = blogSchema.safeParse(BlogData);
+  if (!success) throw Error(JSON.stringify(error.flatten().fieldErrors));
+  if (!data.userId) throw Error("unauthorized");
+
+  const response = await prisma.blog.create({
+    data: { ...data, userId: data.userId },
+  });
+  return { status: true, message: "blog created successfully", response };
 };

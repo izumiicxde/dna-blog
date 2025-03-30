@@ -5,12 +5,34 @@ import { Input } from "./ui/input";
 import Editor from "./editor";
 import { UploadButton } from "utils/uploadthing";
 import { toast } from "sonner";
+import { useFetcher, useNavigate } from "@remix-run/react";
+import { useEffect } from "react";
+import { BlogSchema } from "utils/blog.schema";
+import { Blog } from "@prisma/client";
 
 const BlogCreateForm = () => {
-  const { content, setContent } = useBlogContentStore();
+  const fetcher = useFetcher();
+  const navigate = useNavigate();
+  const { content, setContent, clearContent } = useBlogContentStore();
 
-  const handleImageSelect = (event: any) => {};
-  const handleBlogSubmit = async () => {};
+  const handleBlogSubmit = async () => {
+    fetcher.submit(
+      { ...content },
+      {
+        encType: "application/json",
+        method: "POST",
+        action: "/blog/create",
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (fetcher.data) {
+      toast("Blog posted successfully.");
+      clearContent();
+      navigate("/");
+    }
+  }, [fetcher.data]);
 
   return (
     <Card className="w-full lg:mt-10  h-auto shadow-none border-none">
@@ -57,11 +79,14 @@ const BlogCreateForm = () => {
         <Button
           className="px-20"
           variant={"default"}
+          disabled={fetcher.state === "submitting"}
           onClick={handleBlogSubmit}
         >
-          Post
+          {fetcher.state === "submitting" ? "Posting..." : "Post"}
         </Button>
-        <Button variant={"ghost"}>Discard</Button>
+        <Button variant={"ghost"} onClick={clearContent}>
+          Discard
+        </Button>
       </CardFooter>
     </Card>
   );

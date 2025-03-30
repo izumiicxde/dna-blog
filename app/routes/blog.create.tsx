@@ -2,7 +2,34 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import PreviewHTML from "~/components/previewHTML";
 import BlogCreateForm from "~/components/blog-create-form";
-import { UploadButton } from "utils/uploadthing";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { getUserFromSession } from "~/services/session.server";
+import { createBlog } from "~/db.server";
+import { BlogSchema } from "utils/blog.schema";
+
+export async function action({ request }: ActionFunctionArgs) {
+  try {
+    const userId = await getUserFromSession(request);
+    if (!userId) throw Error("unauthorized");
+
+    const body: BlogSchema = await request.json();
+    if (!body) throw Error("invalid request body");
+
+    const response = await createBlog({ ...body, userId: userId });
+    return Response.json(
+      {
+        message: response.message,
+        status: response.status,
+        blog: response.response,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    if (error instanceof Error)
+      return Response.json({ message: error.message }, { status: 400 });
+    return Response.json({ message: "something went wrong" }, { status: 500 });
+  }
+}
 
 const CreateBlog = () => {
   const [isPreview, setIsPreview] = useState(false);
