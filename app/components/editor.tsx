@@ -7,6 +7,7 @@ import { MenuBar } from "./editor-menubar";
 import {
   Image,
   CodeBlockLowlight,
+  ImageResize,
   Placeholder,
   Dropcursor,
   createLowlight,
@@ -16,6 +17,7 @@ import { useBlogContentStore, useEditorStore } from "utils/store";
 import { EditorView } from "@tiptap/pm/view";
 import { Slice } from "@tiptap/pm/model";
 import { toast } from "sonner";
+import { uploadFileToServer } from "utils/uploadthing";
 
 // highlighting registration
 const lowlight = createLowlight(all);
@@ -50,18 +52,18 @@ const extensions = [
       return "Write your blog content here....";
     },
   }),
+  ImageResize,
 ];
 
 const Editor = () => {
-  const { setEditor } = useEditorStore();
+  const { editor, setEditor } = useEditorStore();
   const { setContent, content } = useBlogContentStore();
-
-  function handleImageDrop(
+  const handleImageDrop = (
     view: EditorView,
     event: DragEvent,
     slice: Slice,
     moved: boolean
-  ): boolean {
+  ): boolean => {
     if (
       !moved &&
       event.dataTransfer &&
@@ -79,24 +81,18 @@ const Editor = () => {
         let img = document.createElement("img"); // Fixes the `new Image()` error
         img.src = _URL.createObjectURL(file);
 
-        img.onload = function () {
+        img.onload = async function () {
           if (img.width > 5000 || img.height > 5000) {
             toast(
               "image needs to be less than 5000 pixels in height and width"
             );
           } else {
-            //TODO: upload the image to the server.
-            toast("valid image uploaded");
-            // uploadImage(file)
-            //   .then((response) => {
-            //     console.log("Image uploaded:", response);
-            //     // Insert the image URL into the editor here
-            //   })
-            //   .catch((error) => {
-            //     window.alert(
-            //       "There was a problem uploading your image, please try again."
-            //     );
-            //   });
+            const response = await uploadFileToServer(file);
+            if (!response) {
+              toast("failed to add image, please try again!");
+              return false;
+            }
+            editor?.chain().focus().setImage({ src: response.url }).run();
           }
         };
       } else {
@@ -105,7 +101,7 @@ const Editor = () => {
       return true;
     }
     return false;
-  }
+  };
 
   return (
     <div className="w-full h-auto relative">

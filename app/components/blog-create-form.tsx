@@ -1,34 +1,43 @@
 import { useBlogContentStore } from "utils/store";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import Editor from "./editor";
+import { UploadButton } from "utils/uploadthing";
+import { toast } from "sonner";
 
 const BlogCreateForm = () => {
   const { content, setContent } = useBlogContentStore();
+
+  const handleImageSelect = (event: any) => {};
+  const handleBlogSubmit = async () => {};
+
   return (
     <Card className="w-full lg:mt-10  h-auto shadow-none border-none">
       <CardHeader>
-        <div className="w-full flex justify-center items-center text-3xl text-gray-300 ">
-          {content.coverImage ? (
+        <div className="w-full flex items-center text-3xl text-gray-300">
+          {!content.coverImage ? (
             <>
-              <Button
-                variant={"ghost"}
-                className="text-black bg-gray-300/20"
-                asChild
-              >
-                <Label htmlFor="cover-image">Add Image</Label>
-              </Button>
-              <Input
-                type="file"
-                id="cover-image"
-                name="cover-image"
-                className="hidden"
+              <UploadImageButton
+                loadingContent="Getting ready.."
+                readyContent="Select cover image"
               />
             </>
           ) : (
-            <></>
+            <div className="flex flex-col">
+              <div className="flex gap-4">
+                <UploadImageButton
+                  loadingContent="Getting ready.."
+                  readyContent="Change"
+                />
+                <Button
+                  onClick={() => setContent({ ...content, coverImage: "" })}
+                >
+                  Remove
+                </Button>
+              </div>
+              <img src={content.coverImage} className="w-fit max-w-sm" />
+            </div>
           )}
         </div>
         <Input
@@ -44,8 +53,52 @@ const BlogCreateForm = () => {
       <CardContent className="w-full h-auto">
         <Editor />
       </CardContent>
+      <CardFooter className="flex gap-4">
+        <Button
+          className="px-20"
+          variant={"default"}
+          onClick={handleBlogSubmit}
+        >
+          Post
+        </Button>
+        <Button variant={"ghost"}>Discard</Button>
+      </CardFooter>
     </Card>
   );
 };
 
 export default BlogCreateForm;
+
+const UploadImageButton = ({
+  loadingContent,
+  readyContent,
+}: {
+  loadingContent: string;
+  readyContent: string;
+}) => {
+  const { content, setContent } = useBlogContentStore();
+  return (
+    <UploadButton
+      content={{
+        button({ ready }) {
+          if (ready) return readyContent;
+          return loadingContent;
+        },
+      }}
+      className=" text-sm ut-button:px-5 ut-button:w-full  ut-button:bg-gray-400/20 ut-button:text-black"
+      endpoint="imageUploader"
+      onClientUploadComplete={(res) => {
+        if (res[0].serverData.url) {
+          setContent({
+            ...content,
+            coverImage: res[0].serverData.url,
+          });
+        }
+        console.log("Files: ", res[0].serverData.url);
+      }}
+      onUploadError={(error: Error) => {
+        toast("something went wrong, please try again.");
+      }}
+    />
+  );
+};

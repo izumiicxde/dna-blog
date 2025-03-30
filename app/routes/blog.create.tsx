@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import PreviewHTML from "~/components/previewHTML";
 import BlogCreateForm from "~/components/blog-create-form";
+import { UploadButton } from "utils/uploadthing";
 
 const CreateBlog = () => {
   const [isPreview, setIsPreview] = useState(false);
@@ -25,6 +26,7 @@ const CreateBlog = () => {
           </Button>
         </div>
       </div>
+
       {isPreview ? <PreviewHTML /> : <BlogCreateForm />}
     </div>
   );

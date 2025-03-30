@@ -15,7 +15,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
 interface Content {
   title: string;
   body: string;
-  coverImage: string | URL;
+  coverImage: string;
 }
 interface EditorContentStore {
   content: Content;

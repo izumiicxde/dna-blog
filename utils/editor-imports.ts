@@ -15,4 +15,5 @@ export { default as CodeBlock } from "@tiptap/extension-code-block";
 export { default as CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 export { default as Dropcursor } from "@tiptap/extension-dropcursor";
 export { default as Placeholder } from "@tiptap/extension-placeholder";
+export { default as ImageResize } from "tiptap-extension-resize-image";
 export { all, createLowlight } from "lowlight";
