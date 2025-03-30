@@ -14,4 +14,16 @@ model User {
   password String
   fullName String
   image    String?
+
+  Blog Blog[]
+}
+
+model Blog {
+  id         String @id @default(uuid())
+  title      String
+  body       String
+  coverImage String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
