@@ -38,6 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserFromSession(request);
   if (!userId) throw redirect("/login");
+  return null;
 };
 
 const CreateBlog = () => {

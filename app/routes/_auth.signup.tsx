@@ -1,10 +1,10 @@
-import { ActionFunctionArgs, data, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Link,
   Form as RForm,
-  useActionData,
   redirect,
   useNavigate,
+  useFetcher,
 } from "@remix-run/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "~/components/input-field";
 import { Button } from "~/components/ui/button";
 import { signup } from "~/db.server";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getUserFromSession,
   getUserSession,
@@ -74,6 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
+    // set user session
     const session = await getUserSession(request);
     session.set("user", user);
 
@@ -82,7 +83,10 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   } catch (error) {
     return Response.json(
-      { error: error instanceof Error ? error.message : "Signup failed" },
+      {
+        success: false,
+        message: error instanceof Error ? error.message : "Signup failed",
+      },
       { status: 400 }
     );
   }
@@ -90,26 +94,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Signup() {
   const navigator = useNavigate();
-  const actionData = useActionData<{ error?: Error | string }>();
+  const fetcher = useFetcher();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onsubmit = async (values: z.infer<typeof signupSchema>) => {
     try {
       setIsSubmitting(true);
-
-      const response = await fetch("/signup", {
+      fetcher.submit(values, {
+        encType: "application/json",
         method: "POST",
-        body: JSON.stringify(values),
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
-      console.log(response);
-      if (response.ok) {
-        toast("signup successfull");
-        navigator("/");
-      }
     } catch (error) {
       if (error instanceof Error) toast(error.message);
       toast("signup failed, try again later.");
@@ -118,10 +112,14 @@ export default function Signup() {
     }
   };
 
-  if (actionData?.error) {
-    if (actionData.error instanceof Error) toast(actionData.error.message);
-    else toast(actionData.error);
-  }
+  useEffect(() => {
+    if (!fetcher.data) return;
+    type TResponse = { success: boolean; message?: string };
+    const data: TResponse = fetcher.data as TResponse;
+
+    if (!data.success) toast(data.message ?? "something went wrong");
+    else toast(data.message ?? "signup complete.");
+  }, [fetcher.data, navigator]);
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
