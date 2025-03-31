@@ -138,3 +138,42 @@ export const getBlogs = async (page: number = 1, pagesize: number = 10) => {
     currentPage: page,
   };
 };
+
+export const getBlogBySlug = async (slug: string) => {
+  const blog = await prisma.blog.findFirst({
+    where: {
+      slug,
+    },
+    include: {
+      user: {
+        select: {
+          fullName: true,
+          username: true,
+          image: true,
+          updatedAt: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: true,
+        },
+      },
+      likes: {
+        select: {
+          id: true,
+          blogId: true,
+          userId: true,
+        },
+      },
+      saves: {
+        select: {
+          id: true,
+          blogId: true,
+          userId: true,
+        },
+      },
+    },
+  });
+
+  return { success: blog ? true : false, blog: blog ?? null };
+};

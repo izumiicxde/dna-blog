@@ -134,7 +134,6 @@ const UploadImageButton = ({
             coverImage: res[0].serverData.url,
           });
         }
-        console.log("Files: ", res[0].serverData.url);
       }}
       onUploadError={(error: Error) => {
         toast("something went wrong, please try again.");

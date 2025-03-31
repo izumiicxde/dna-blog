@@ -38,12 +38,13 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
         </div>
       </CardHeader>
       <CardContent className="group">
-        <Link to={blog.title.split(" ").join("_")}>
+        <Link to={`/blog/${blog.title.split(" ").join("_")}`}>
           <h2 className="text-4xl font-black group-hover:text-blue-900">
             {blog.title}
           </h2>
         </Link>
       </CardContent>
+      <CardFooter></CardFooter>
     </Card>
   );
 };

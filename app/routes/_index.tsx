@@ -13,6 +13,7 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to dna blog" },
   ];
 };
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const userId = await getUserFromSession(request);
@@ -53,10 +54,18 @@ export default function Index() {
       <div className="w-60 hidden lg:flex flex-col py-10 ">
         <IndexSidebar authenticated={authenticated} />
       </div>
-      <div className="w-full lg:w-full  h-full min-h-screen flex flex-col gap-4 pt-4 items-start">
-        {blogs?.map((blog: DisplayBlog) => (
-          <BlogCard blog={blog} key={`${blog.title} + ${blog.createdAt}`} />
-        ))}
+      <div className="w-full lg:w-full h-auto flex flex-col gap-4 pt-4 items-start">
+        {blogs.length === 0 ? (
+          <p className="text-sm w-full h-[60vh] flex justify-center items-center text-gray-400">
+            No blogs to display
+          </p>
+        ) : (
+          <>
+            {blogs?.map((blog: DisplayBlog) => (
+              <BlogCard blog={blog} key={`${blog.title} + ${blog.createdAt}`} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

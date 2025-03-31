@@ -19,8 +19,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  Likes     Like[]
-  Save      Save[]
+  likes     Like[]
+  saves     Save[]
 }
 
 model Blog {
@@ -35,8 +35,8 @@ model Blog {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  Likes     Like[]
-  Save      Save[]
+  likes     Like[]
+  saves     Save[]
 
   tags BlogTag[]
 }
