@@ -2,7 +2,11 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import PreviewHTML from "~/components/previewHTML";
 import BlogCreateForm from "~/components/blog-create-form";
-import { ActionFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import { getUserFromSession } from "~/services/session.server";
 import { createBlog } from "~/db.server";
 import { BlogSchema } from "utils/blog.schema";
@@ -20,7 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
       {
         message: response.message,
         status: response.status,
-        blog: response.response,
+        blog: response.blog,
       },
       { status: 201 }
     );
@@ -30,6 +34,11 @@ export async function action({ request }: ActionFunctionArgs) {
     return Response.json({ message: "something went wrong" }, { status: 500 });
   }
 }
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await getUserFromSession(request);
+  if (!userId) throw redirect("/login");
+};
 
 const CreateBlog = () => {
   const [isPreview, setIsPreview] = useState(false);

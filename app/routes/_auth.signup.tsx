@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, data, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Link,
   Form as RForm,
@@ -65,6 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
   type SignupSchema = z.infer<typeof signupSchema>;
   try {
     const body: SignupSchema = signupSchema.parse(await request.json());
+
     const user = await signup(body);
     if (!user?.id) {
       return Response.json(
@@ -89,7 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Signup() {
   const navigator = useNavigate();
-  const actionData = useActionData<{ error: Error | string }>();
+  const actionData = useActionData<{ error?: Error | string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onsubmit = async (values: z.infer<typeof signupSchema>) => {
@@ -104,7 +105,7 @@ export default function Signup() {
           "Content-Type": "application/json",
         },
       });
-
+      console.log(response);
       if (response.ok) {
         toast("signup successfull");
         navigator("/");

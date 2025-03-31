@@ -69,7 +69,22 @@ const BlogCreateForm = () => {
           }}
           value={content.title}
           placeholder="New post title goes here...."
-          className="w-full h-32 !text-5xl font-black placeholder:text-5xl p-5 rounded-lg focus:outline-none focus:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0 focus-visible:ring-none outline-none ring-0 border-none shadow-none "
+          className="w-full h-32 !text-5xl font-black placeholder:text-5xl p-5 rounded-lg focus:outline-none  focus:ring-none  focus-visible:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0  outline-none ring-0 border-none shadow-none"
+        />
+
+        <Input
+          placeholder="#webdev,#react, nohashtag...."
+          value={content.tags}
+          onChange={(event) => {
+            const tags = event.target.value
+              .split(" ")
+              .map((tag) => tag.trim()) // Remove extra spaces
+              .filter((tag) => tag !== "#")
+              .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`)); // Ensure # at start
+
+            setContent({ ...content, tags });
+          }}
+          className="focus:outline-none  focus:ring-none  focus-visible:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0  outline-none ring-0 border-none shadow-none"
         />
       </CardHeader>
       <CardContent className="w-full h-auto">

@@ -42,7 +42,6 @@ export const signup = async (req: z.infer<typeof signupSchema>) => {
       fullName: data.fullName,
     },
   });
-
   return created;
 };
 
@@ -81,8 +80,61 @@ export const createBlog = async (BlogData: BlogSchema) => {
   if (!success) throw Error(JSON.stringify(error.flatten().fieldErrors));
   if (!data.userId) throw Error("unauthorized");
 
-  const response = await prisma.blog.create({
-    data: { ...data, userId: data.userId },
+  const { title, body, coverImage, tags } = data;
+  const blog = await prisma.blog.create({
+    data: {
+      title,
+      body,
+      coverImage,
+      userId: data.userId,
+      slug: title.split(" ").join("_"),
+    },
   });
-  return { status: true, message: "blog created successfully", response };
+
+  if (tags && tags.length > 0) {
+    const validTags = tags
+      .filter((tag) => tag !== "#")
+      .filter((tag) => tag !== "");
+
+    Promise.all(
+      validTags.map(async (tagName) => {
+        let tag = await prisma.tag.findUnique({
+          where: { name: tagName },
+        });
+        if (!tag) tag = await prisma.tag.create({ data: { name: tagName } });
+
+        await prisma.blogTag.create({
+          data: { blogId: blog.id, tagId: tag.id },
+        });
+      })
+    );
+  }
+
+  return { status: true, message: "blog created successfully", blog };
+};
+
+export const getBlogs = async (page: number = 1, pagesize: number = 10) => {
+  const blogs = await prisma.blog.findMany({
+    skip: (page - 1) * pagesize,
+    take: pagesize,
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: {
+        select: {
+          fullName: true,
+          image: true,
+          username: true,
+        },
+      },
+    },
+  });
+
+  const totalBlogs = await prisma.blog.count();
+
+  return {
+    blogs,
+    total: totalBlogs,
+    totalPages: Math.ceil(totalBlogs / pagesize),
+    currentPage: page,
+  };
 };

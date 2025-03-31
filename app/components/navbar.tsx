@@ -11,13 +11,17 @@ const Navbar = ({ success }: { success: boolean }) => {
         <Link to={"/"}>
           <img src="/logo.svg" alt="logo" className="w-16" />
         </Link>
-        <div className="flex items-center border border-black px-2 rounded-md ">
-          <Search className="size-4 group" />
-          <Input
-            placeholder="enter the search term"
-            className="w-96 h-8 py-0 border-none outline-none focus:outline-none focus:border-none focus:ring-0 focus-visible:ring-none focus-visible:outline-none focus-visible:ring-0 shadow-none group"
-          />
-        </div>
+        {success && (
+          <div className="flex items-center border border-black px-2 rounded-md ">
+            <>
+              <Search className="size-4 group" />
+              <Input
+                placeholder="enter the search term"
+                className="w-96 h-8 py-0 border-none outline-none focus:outline-none focus:border-none focus:ring-0 focus-visible:ring-none focus-visible:outline-none focus-visible:ring-0 shadow-none group"
+              />
+            </>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-4 items-center">

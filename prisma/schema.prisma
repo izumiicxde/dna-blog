@@ -19,6 +19,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  Likes     Like[]
+  Save      Save[]
 }
 
 model Blog {
@@ -26,10 +28,52 @@ model Blog {
   title      String
   body       String
   coverImage String
+  slug       String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  Likes     Like[]
+  Save      Save[]
+
+  tags BlogTag[]
+}
+
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, blogId])
+}
+
+model Save {
+  id     String @id @default(uuid())
+  userId String
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, blogId])
+}
+
+model Tag {
+  id    String    @id @default(uuid())
+  name  String    @unique
+  blogs BlogTag[]
+}
+
+model BlogTag {
+  blogId String
+  tagId  String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+  tag    Tag    @relation(fields: [tagId], references: [id])
+
+  @@unique([blogId, tagId])
 }

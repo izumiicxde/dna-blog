@@ -13,11 +13,6 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setEditor: (editor) => set({ editor }),
 }));
 
-// interface Content {
-//   title: string;
-//   body: string;
-//   coverImage: string;
-// }
 interface EditorContentStore {
   content: BlogSchema;
   setContent: (content: BlogSchema) => void;
@@ -27,6 +22,7 @@ const initialBlogContent = {
   title: "",
   body: "",
   coverImage: "",
+  tags: [],
 };
 
 export const useBlogContentStore = create<EditorContentStore>()(

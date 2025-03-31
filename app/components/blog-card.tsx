@@ -1,6 +1,8 @@
-import { Bookmark, MessageCircle } from "lucide-react";
+import { Bookmark, LucideBugOff, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Link } from "@remix-run/react";
+import { Blog } from "@prisma/client";
+import { DisplayBlog } from "utils/types";
 
 type BlogCardContent = {
   item: {
@@ -15,49 +17,33 @@ type BlogCardContent = {
     url?: string;
   };
 };
-const BlogCard = ({ item }: BlogCardContent) => {
+const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
   return (
-    <Card className="w-full ">
-      <CardHeader className="flex items-start gap-4 ">
-        <div className="flex items-center text-xs gap-3">
-          {!item.url && <div className="w-10 h-10 rounded-full bg-black " />}
-          <div className="flex flex-col ">
-            <p className="flex gap-1 text-sm font-normal">
-              <span className="font-semibold cursor-pointer">
-                {item.author}
-              </span>
-              <span>for {item.team}</span>
-            </p>
-            <p className="text-xs">{item.date}</p>
+    <Card className="w-full max-w-5xl">
+      <CardHeader className="flex flex-col gap-3">
+        <div className="flex items-start gap-2">
+          {blog.user.image ? (
+            <img
+              src={blog.user.image}
+              alt={blog.user.fullName}
+              className="w-10 h-10 rounded-full "
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-black" />
+          )}
+          <div className="">
+            <p className="text-sm">{blog.user.username}</p>
+            <p className="text-xs">{blog.user.fullName}</p>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
-        <Link
-          to={`/blog/${item.title.split(" ").join("_")}`}
-          className="w-full group"
-        >
-          <h2 className="text-3xl font-black group-hover:text-indigo-500">
-            {item.title}
+      <CardContent className="group">
+        <Link to={blog.title.split(" ").join("_")}>
+          <h2 className="text-4xl font-black group-hover:text-blue-900">
+            {blog.title}
           </h2>
-          <p className="text-sm py-1 px-2 rounded-lg hover:bg-blue-300/10 w-fit">
-            {item.hashtag}
-          </p>
         </Link>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
-        <div className=" flex gap-9 items-center ">
-          <p>{item.reactions} reactions</p>
-          <p className="flex gap-1 items-center">
-            <MessageCircle className="size-4" />
-            {item.comments} comments{" "}
-          </p>
-        </div>
-        <div className="flex items-center gap-5 ">
-          <p>{item.read_time}</p>
-          <Bookmark className="size-5" />
-        </div>
-      </CardFooter>
     </Card>
   );
 };

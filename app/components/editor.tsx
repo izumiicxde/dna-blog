@@ -58,6 +58,7 @@ const extensions = [
 const Editor = () => {
   const { editor, setEditor } = useEditorStore();
   const { setContent, content } = useBlogContentStore();
+
   const handleImageDrop = (
     view: EditorView,
     event: DragEvent,
