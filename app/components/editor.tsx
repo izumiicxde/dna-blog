@@ -71,6 +71,7 @@ const Editor = () => {
       event.dataTransfer.files &&
       event.dataTransfer.files[0]
     ) {
+      toast("uploading image please wait");
       let file = event.dataTransfer.files[0];
       let filesize = (file.size / 1024 / 1024).toFixed(4);
 

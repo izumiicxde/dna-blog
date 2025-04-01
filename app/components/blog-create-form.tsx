@@ -125,7 +125,7 @@ const UploadImageButton = ({
           return loadingContent;
         },
       }}
-      className=" text-sm ut-button:px-5 ut-button:w-full  ut-button:bg-gray-400/20 ut-button:text-black"
+      className=" text-sm ut-button:px-5 ut-button:w-full ut-uploading:ut-button:bg-gray-400 ut-upload-icon:bg-black/90  ut-button:bg-gray-400/20 ut-button:text-black"
       endpoint="imageUploader"
       onClientUploadComplete={(res) => {
         if (res[0].serverData.url) {
