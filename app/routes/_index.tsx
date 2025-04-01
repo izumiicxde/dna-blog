@@ -17,7 +17,6 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const userId = await getUserFromSession(request);
-
     const { blogs, currentPage, total, totalPages } = await getBlogs();
 
     return Response.json(
@@ -49,6 +48,7 @@ export default function Index() {
     totalPages,
     currentPage,
   } = useLoaderData<typeof loader>();
+
   return (
     <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10">
       <div className="w-60 hidden lg:flex flex-col py-10 ">

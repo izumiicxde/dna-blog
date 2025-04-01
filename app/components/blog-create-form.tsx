@@ -119,6 +119,12 @@ const UploadImageButton = ({
   const { content, setContent } = useBlogContentStore();
   return (
     <UploadButton
+      onUploadBegin={() => {
+        toast("uploading image, please wait.");
+      }}
+      onUploadAborted={() => {
+        toast("upload failed");
+      }}
       content={{
         button({ ready }) {
           if (ready) return readyContent;
