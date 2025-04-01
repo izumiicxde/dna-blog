@@ -93,15 +93,18 @@ export const createBlog = async (BlogData: BlogSchema) => {
 
   if (tags && tags.length > 0) {
     const validTags = tags
-      .filter((tag) => tag !== "#")
-      .filter((tag) => tag !== "");
+      .map((tag) => tag.trim()) // Remove spaces
+      .filter((tag) => tag !== "#" && tag !== ""); // Remove invalid tags
 
-    Promise.all(
+    await Promise.all(
       validTags.map(async (tagName) => {
         let tag = await prisma.tag.findUnique({
           where: { name: tagName },
         });
-        if (!tag) tag = await prisma.tag.create({ data: { name: tagName } });
+
+        if (!tag) {
+          tag = await prisma.tag.create({ data: { name: tagName } });
+        }
 
         await prisma.blogTag.create({
           data: { blogId: blog.id, tagId: tag.id },

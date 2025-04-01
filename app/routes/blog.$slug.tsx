@@ -1,6 +1,6 @@
-import { Blog } from "@prisma/client";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useParams } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import { DisplayBlog } from "utils/types";
 import { getBlogBySlug } from "~/db.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -22,19 +22,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 const BlogDisplayPage = () => {
   type LoaderResponse = {
     success: boolean;
-    blog: Blog;
+    blog: DisplayBlog;
     message: string;
   };
+
   const { success, blog, message }: LoaderResponse =
     useLoaderData<typeof loader>();
 
-  console.log(blog);
   if (!success)
     return (
       <div className="w-full h-full flex justify-center items-center">
         Loading...
       </div>
     );
+
   return (
     <div className="p-20 pt-5">
       {blog.coverImage && (
@@ -44,6 +45,7 @@ const BlogDisplayPage = () => {
           className="w-full h-auto max-h-80 object-cover object-center rounded-sm"
         />
       )}
+      {/* <p className="text-xs pt-4 ">{blog.tags[0].tag.name.split(",")}</p> */}
       <h2 className="text-5xl font-black pt-10">{blog?.title}</h2>
       <div
         className="prose-sm w-full content-preview  pt-10"
