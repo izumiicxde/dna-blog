@@ -81,6 +81,7 @@ export const createBlog = async (BlogData: BlogSchema) => {
   if (!data.userId) throw Error("unauthorized");
 
   const { title, body, coverImage, tags } = data;
+
   const blog = await prisma.blog.create({
     data: {
       title,
@@ -91,26 +92,25 @@ export const createBlog = async (BlogData: BlogSchema) => {
     },
   });
 
-  if (tags && tags.length > 0) {
+  if (tags && Array.isArray(tags) && tags.length > 0) {
     const validTags = tags
-      .map((tag) => tag.trim()) // Remove spaces
-      .filter((tag) => tag !== "#" && tag !== ""); // Remove invalid tags
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "#" && tag !== "" && tag !== ",");
 
-    await Promise.all(
-      validTags.map(async (tagName) => {
-        let tag = await prisma.tag.findUnique({
-          where: { name: tagName },
-        });
+    console.log(validTags);
+    for (const tagName of validTags) {
+      let tag = await prisma.tag.findUnique({
+        where: { name: tagName },
+      });
 
-        if (!tag) {
-          tag = await prisma.tag.create({ data: { name: tagName } });
-        }
+      if (!tag) {
+        tag = await prisma.tag.create({ data: { name: tagName } });
+      }
 
-        await prisma.blogTag.create({
-          data: { blogId: blog.id, tagId: tag.id },
-        });
-      })
-    );
+      await prisma.blogTag.create({
+        data: { blogId: blog.id, tagId: tag.id },
+      });
+    }
   }
 
   return { status: true, message: "blog created successfully", blog };

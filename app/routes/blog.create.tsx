@@ -20,6 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (!body) throw Error("invalid request body");
 
     const response = await createBlog({ ...body, userId: userId });
+
     return Response.json(
       {
         message: response.message,

@@ -7,15 +7,34 @@ import { UploadButton } from "utils/uploadthing";
 import { toast } from "sonner";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
-import { BlogSchema } from "utils/blog.schema";
-import { Blog } from "@prisma/client";
+import { blogSchema } from "utils/blog.schema";
+import { z } from "zod";
+import { useState } from "react";
 
 const BlogCreateForm = () => {
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const { content, setContent, clearContent } = useBlogContentStore();
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
   const handleBlogSubmit = async () => {
+    const validation = blogSchema.safeParse(content);
+
+    if (!validation.success) {
+      const fieldErrors = validation.error.flatten().fieldErrors;
+
+      setErrors({
+        title: fieldErrors.title?.[0],
+        body:
+          content.body === "<p></p>" || content.body === ""
+            ? "body cannot be empty"
+            : "",
+      });
+      return;
+    }
+
+    setErrors({}); // Clear errors if validation passes
+
     fetcher.submit(
       { ...content },
       {
@@ -27,24 +46,28 @@ const BlogCreateForm = () => {
   };
 
   useEffect(() => {
+    type FetcherData = { message: string; status?: boolean };
+
     if (fetcher.data) {
-      toast("Blog posted successfully.");
+      const data = fetcher.data as FetcherData;
+      toast(
+        data.message ||
+          (data.status ? "blog created successfully" : "blog creation failed")
+      );
       clearContent();
       navigate("/");
     }
   }, [fetcher.data]);
 
   return (
-    <Card className="w-full lg:mt-10  h-auto shadow-none border-none">
+    <Card className="w-full lg:mt-10 h-auto shadow-none border-none">
       <CardHeader>
         <div className="w-full flex items-center text-3xl text-gray-300">
           {!content.coverImage ? (
-            <>
-              <UploadImageButton
-                loadingContent="Getting ready.."
-                readyContent="Select cover image"
-              />
-            </>
+            <UploadImageButton
+              loadingContent="Getting ready.."
+              readyContent="Select cover image"
+            />
           ) : (
             <div className="flex flex-col">
               <div className="flex gap-4">
@@ -64,32 +87,34 @@ const BlogCreateForm = () => {
         </div>
         <Input
           type="text"
-          onChange={(e) => {
-            setContent({ ...content, title: e.target.value });
-          }}
+          onChange={(e) => setContent({ ...content, title: e.target.value })}
           value={content.title}
           placeholder="New post title goes here...."
           className="w-full h-32 !text-5xl font-black placeholder:text-5xl p-5 rounded-lg focus:outline-none  focus:ring-none  focus-visible:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0  outline-none ring-0 border-none shadow-none"
         />
+        {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
 
         <Input
           placeholder="#webdev,#react, nohashtag...."
-          value={content.tags}
+          value={content.tags.join(" ")}
           onChange={(event) => {
             const tags = event.target.value
               .split(" ")
-              .map((tag) => tag.trim()) // Remove extra spaces
+              .map((tag) => tag.trim())
               .filter((tag) => tag !== "#")
-              .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`)); // Ensure # at start
-
+              .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`));
             setContent({ ...content, tags });
           }}
           className="focus:outline-none  focus:ring-none  focus-visible:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0  outline-none ring-0 border-none shadow-none"
         />
       </CardHeader>
+
       <CardContent className="w-full h-auto">
         <Editor />
+
+        {errors.body && <p className="text-red-500 text-xs">{errors.body}</p>}
       </CardContent>
+
       <CardFooter className="flex gap-4">
         <Button
           className="px-20"
