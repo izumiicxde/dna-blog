@@ -96,13 +96,15 @@ const BlogCreateForm = () => {
 
         <Input
           placeholder="#webdev,#react, nohashtag...."
-          value={content.tags.join(" ")}
+          value={content.tags}
           onChange={(event) => {
             const tags = event.target.value
               .split(" ")
               .map((tag) => tag.trim())
               .filter((tag) => tag !== "#")
-              .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`));
+              .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`))
+              .join(",");
+            // tho we split this up, in the end it will be rendered as single string and returned the same.
             setContent({ ...content, tags });
           }}
           className="focus:outline-none  focus:ring-none  focus-visible:ring-none focus:ring-0 focus-visible:outline-none focus:border-none  focus-visible:ring-0  outline-none ring-0 border-none shadow-none"

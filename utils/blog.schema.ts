@@ -9,7 +9,7 @@ export const blogSchema = z.object({
     .string()
     .min(40, { message: "Body must have at least 40 characters." }),
   coverImage: z.string(),
-  tags: z.array(z.string().min(1, { message: "Tags cannot be empty." })),
+  tags: z.string(),
   userId: z.string().optional(),
 });
 

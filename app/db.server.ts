@@ -92,12 +92,12 @@ export const createBlog = async (BlogData: BlogSchema) => {
     },
   });
 
-  if (tags && Array.isArray(tags) && tags.length > 0) {
+  if (tags) {
     const validTags = tags
+      .split(",")
       .map((tag) => tag.trim())
       .filter((tag) => tag !== "#" && tag !== "" && tag !== ",");
 
-    console.log(validTags);
     for (const tagName of validTags) {
       let tag = await prisma.tag.findUnique({
         where: { name: tagName },
