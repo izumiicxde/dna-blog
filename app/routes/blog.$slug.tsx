@@ -28,7 +28,6 @@ const BlogDisplayPage = () => {
 
   const { success, blog, message }: LoaderResponse =
     useLoaderData<typeof loader>();
-  console.log(blog);
   if (!success)
     return (
       <div className="w-full h-full flex justify-center items-center">

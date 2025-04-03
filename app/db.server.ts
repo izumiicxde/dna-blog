@@ -4,6 +4,7 @@ import { compareHash, hashPassword } from "utils/password";
 import { loginSchema, signupSchema } from "utils/user.schema";
 import { z } from "zod";
 import { getUserFromSession } from "./services/session.server";
+import slugify from "slugify";
 
 declare global {
   var __prisma: PrismaClient;
@@ -81,6 +82,11 @@ export const createBlog = async (BlogData: BlogSchema) => {
   if (!data.userId) throw Error("unauthorized");
 
   const { title, body, coverImage, tags } = data;
+  const slug = slugify(title, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
 
   const blog = await prisma.blog.create({
     data: {
@@ -88,7 +94,7 @@ export const createBlog = async (BlogData: BlogSchema) => {
       body,
       coverImage,
       userId: data.userId,
-      slug: title.split(" ").join("_"),
+      slug,
     },
   });
 

@@ -50,7 +50,7 @@ export default function Index() {
   } = useLoaderData<typeof loader>();
 
   return (
-    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10">
+    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10  pr-40">
       <div className="w-60 hidden lg:flex flex-col py-10 ">
         <IndexSidebar authenticated={authenticated} />
       </div>
@@ -64,6 +64,9 @@ export default function Index() {
             {blogs?.map((blog: DisplayBlog) => (
               <BlogCard blog={blog} key={`${blog.title} + ${blog.createdAt}`} />
             ))}
+            <p className="text-xs w-full flex justify-center items-center text-gray-400 select-none">
+              The End.
+            </p>
           </>
         )}
       </div>
