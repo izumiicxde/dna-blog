@@ -8,6 +8,7 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "prisma": "prisma generate && prisma migrate dev",
+    "studio": "prisma studio",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },

@@ -45,7 +45,7 @@ const BlogDisplayPage = () => {
     );
 
   return (
-    <div className="p-20 pt-5">
+    <div className="p-60 pt-5">
       {blog.coverImage && (
         <img
           src={blog.coverImage}

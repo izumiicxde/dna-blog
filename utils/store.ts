@@ -2,6 +2,22 @@ import { create } from "zustand";
 import { Editor } from "@tiptap/react";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { BlogSchema } from "./blog.schema";
+import { ProfileUser } from "./types";
+
+interface UserStore {
+  user: ProfileUser | null;
+  setUser: (user: ProfileUser | null) => void;
+}
+
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+    }),
+    { name: "user-store" }
+  )
+);
 
 type EditorStore = {
   editor: Editor | null;
@@ -22,7 +38,7 @@ const initialBlogContent = {
   title: "",
   body: "",
   coverImage: "",
-  tags: [],
+  tags: "",
 };
 
 export const useBlogContentStore = create<EditorContentStore>()(

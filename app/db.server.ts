@@ -3,9 +3,9 @@ import { blogSchema, BlogSchema } from "utils/blog.schema";
 import { compareHash, hashPassword } from "utils/password";
 import { loginSchema, signupSchema } from "utils/user.schema";
 import { z } from "zod";
-import { getUserFromSession } from "./services/session.server";
 import slugify from "slugify";
 import { LikeBlogRequest } from "utils/types";
+import { getUserFromSession } from "./services/session.server";
 
 declare global {
   var __prisma: PrismaClient;
@@ -75,6 +75,24 @@ export const login = async ({
 
   if (!isPasswordCorrect) throw new Error("invalid credentials");
   return user;
+};
+
+export const getUser = async (request: Request) => {
+  const userId = await getUserFromSession(request);
+  if (!userId) throw new Error("not authorized.");
+  const user = await prisma.user.findFirst({
+    where: { id: userId },
+    select: {
+      email: true,
+      fullName: true,
+      image: true,
+      username: true,
+      Blog: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (!user) return { message: "No user found.", success: false, user: null };
+  return { message: "user found successfully", user, success: true };
 };
 
 export const createBlog = async (BlogData: BlogSchema) => {

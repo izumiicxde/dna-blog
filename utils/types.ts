@@ -33,3 +33,17 @@ export type LikeBlogRequest = {
   userId: string;
   blogId: string;
 };
+
+// USER request for profile
+export type UserResponse = {
+  message: string;
+  success: boolean;
+  user: ProfileUser;
+};
+export interface ProfileUser {
+  email: string;
+  fullName: string;
+  image: any;
+  username: string;
+  Blog: DisplayBlog[];
+}
