@@ -5,6 +5,7 @@ import { loginSchema, signupSchema } from "utils/user.schema";
 import { z } from "zod";
 import { getUserFromSession } from "./services/session.server";
 import slugify from "slugify";
+import { LikeBlogRequest } from "utils/types";
 
 declare global {
   var __prisma: PrismaClient;
@@ -186,3 +187,5 @@ export const getBlogBySlug = async (slug: string) => {
 
   return { success: blog ? true : false, blog: blog ?? null };
 };
+
+export const likeBlogPost = async (req: LikeBlogRequest) => {};

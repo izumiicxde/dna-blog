@@ -23,6 +23,7 @@ type BlogCardContent = {
 const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
   const [isLiked, setIsLiked] = useState(false);
   const handleLike = async () => {};
+
   return (
     <Card className="w-full shadow-none rounded-none border-0 border-b-2 border-b-black/5">
       <CardHeader className="flex flex-col gap-3">

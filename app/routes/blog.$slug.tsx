@@ -1,7 +1,7 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { DisplayBlog } from "utils/types";
-import { getBlogBySlug } from "~/db.server";
+import { DisplayBlog, LikeBlogRequest } from "utils/types";
+import { getBlogBySlug, likeBlogPost } from "~/db.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -19,6 +19,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       return Response.json({ success: false, message: error.message });
   }
 }
+
+export async function action({ request }: ActionFunctionArgs) {
+  const req: LikeBlogRequest = await request.json();
+  if (!req)
+    return Response.json({ message: "invalid request" }, { status: 400 });
+
+  const res = await likeBlogPost(req);
+}
+
 const BlogDisplayPage = () => {
   type LoaderResponse = {
     success: boolean;

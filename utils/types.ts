@@ -28,3 +28,8 @@ export interface Tag2 {
   id: string;
   name: string;
 }
+
+export type LikeBlogRequest = {
+  userId: string;
+  blogId: string;
+};
