@@ -50,11 +50,11 @@ export default function Index() {
   } = useLoaderData<typeof loader>();
 
   return (
-    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10  pr-40">
+    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10  lg:pr-40">
       <div className="w-60 hidden lg:flex flex-col py-10 ">
         <IndexSidebar authenticated={authenticated} />
       </div>
-      <div className="w-full lg:w-full h-auto flex flex-col gap-4 pt-4 items-start">
+      <div className="w-full lg:w-full h-auto flex flex-col gap-4 pt-4 items-start lg:pl-10">
         {blogs.length === 0 ? (
           <p className="text-sm w-full h-[60vh] flex justify-center items-center text-gray-400">
             No blogs to display

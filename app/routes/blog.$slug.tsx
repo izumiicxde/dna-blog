@@ -45,7 +45,7 @@ const BlogDisplayPage = () => {
     );
 
   return (
-    <div className="p-60 pt-5">
+    <div className="lg:p-60 md:p-28 p-10 md:pt-5 lg:pt-5">
       {blog.coverImage && (
         <img
           src={blog.coverImage}
@@ -56,7 +56,7 @@ const BlogDisplayPage = () => {
       {/* <p className="text-xs pt-4 ">{blog.tags[0].tag.name.split(",")}</p> */}
       <h2 className="text-5xl font-black pt-10">{blog?.title}</h2>
       <div
-        className="prose-sm w-full content-preview  pt-10"
+        className=" prose-sm w-full content-preview  pt-10"
         dangerouslySetInnerHTML={{ __html: blog.body }}
       ></div>
     </div>

@@ -154,6 +154,18 @@ export const getBlogs = async (page: number = 1, pagesize: number = 10) => {
           username: true,
         },
       },
+      tags: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      },
+      likes: true,
+      saves: true,
     },
   });
 
@@ -183,23 +195,16 @@ export const getBlogBySlug = async (slug: string) => {
       },
       tags: {
         select: {
-          tag: true,
+          tag: {
+            select: {
+              name: true,
+              blogs: true,
+            },
+          },
         },
       },
-      likes: {
-        select: {
-          id: true,
-          blogId: true,
-          userId: true,
-        },
-      },
-      saves: {
-        select: {
-          id: true,
-          blogId: true,
-          userId: true,
-        },
-      },
+      likes: true,
+      saves: true,
     },
   });
 

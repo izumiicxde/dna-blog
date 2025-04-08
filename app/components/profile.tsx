@@ -47,7 +47,7 @@ const Profile = ({ children }: { children: React.ReactNode }) => {
           <SheetTitle className="flex gap-1  items-center select-none">
             <Button
               variant={"ghost"}
-              className="hover:bg-none rounded-full "
+              className="hover:bg-none rounded-full"
               size={"icon"}
             >
               {user?.image ? (
@@ -67,11 +67,12 @@ const Profile = ({ children }: { children: React.ReactNode }) => {
           {user?.Blog && user?.Blog.length > 0 ? (
             <>
               <h2 className="font-bold">Recent Blogs</h2>
-              <div className="flex gap-1 flex-col pt-5">
+              <div className="flex gap-1 flex-col pt-5 ">
                 {user.Blog.map((blog) => (
                   <Button
+                    key={blog.id}
                     variant={"ghost"}
-                    className="text-sm text-left flex justify-start"
+                    className="text-sm text-left flex justify-start line-clamp-1 p-0 lg:p-2"
                     asChild
                   >
                     <Link

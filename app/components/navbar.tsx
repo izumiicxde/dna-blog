@@ -6,13 +6,13 @@ import Profile from "./profile";
 
 const Navbar = ({ success }: { success: boolean }) => {
   return (
-    <div className="flex w-full h-fit items-center justify-between px-12 py-5 sticky  inset-0 z-50 bg-inherit">
+    <div className="flex w-full h-fit items-center justify-between lg:px-12 md:px-5 px-5 py-5 sticky  inset-0 z-50 bg-inherit">
       <div className="flex gap-10 items-center">
         <Link to={"/"}>
           <img src="/logo.svg" alt="logo" className="w-16" />
         </Link>
         {success && (
-          <div className="flex items-center border border-black px-2 rounded-md ">
+          <div className="hidden md:flex items-center border border-black px-2 rounded-md ">
             <>
               <Search className="size-4 group" />
               <Input

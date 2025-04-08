@@ -22,6 +22,8 @@ export interface User {
 
 export interface Tag {
   tag: Tag2;
+  blogId: string;
+  tagId: string;
 }
 
 export interface Tag2 {
