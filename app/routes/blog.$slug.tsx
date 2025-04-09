@@ -68,7 +68,7 @@ const BlogDisplayPage = () => {
           <img
             src={blog.coverImage}
             alt={blog.title}
-            className="w-full h-auto max-h-80 object-cover object-center rounded-sm"
+            className="w-full h-auto max-h-80 object-cover object-center rounded-sm mt-5"
           />
         )}
         <h2 className="text-5xl font-black pt-10">{blog?.title}</h2>

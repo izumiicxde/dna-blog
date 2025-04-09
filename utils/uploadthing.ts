@@ -3,7 +3,6 @@ import { genUploader } from "uploadthing/client";
 import type { UploadRouter } from "~/routes/api.uploadthing";
 
 export const UploadButton = generateUploadButton<UploadRouter>();
-
 export const { uploadFiles } = genUploader<UploadRouter>();
 
 export const uploadFileToServer = async (file: File) => {
