@@ -105,7 +105,7 @@ const Editor = () => {
     return false;
   };
 
-  if (!editor) return null;
+  // if (!editor) return null;
 
   return (
     <div className="w-full h-auto relative">

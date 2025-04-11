@@ -31,6 +31,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
 interface EditorContentStore {
   content: BlogSchema;
+  initialized: boolean;
   setContent: (content: BlogSchema) => void;
   clearContent: () => void;
 }
@@ -45,6 +46,7 @@ export const useBlogContentStore = create<EditorContentStore>()(
   persist(
     (set) => ({
       content: initialBlogContent,
+      initialized: false,
       setContent: (content: BlogSchema) => set({ content }),
       clearContent: () => {
         set({ content: initialBlogContent });

@@ -141,6 +141,55 @@ export const createBlog = async (BlogData: BlogSchema) => {
   return { status: true, message: "blog created successfully", blog };
 };
 
+export const updateBlog = async (id: string, BlogData: BlogSchema) => {
+  const { success, data, error } = blogSchema.safeParse(BlogData);
+  if (!success) throw Error(JSON.stringify(error.flatten().fieldErrors));
+  if (!data.userId) throw Error("unauthorized");
+
+  const { title, body, coverImage, tags } = data;
+  const slug = slugify(title, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
+
+  const blog = await prisma.blog.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      body,
+      coverImage,
+      userId: data.userId,
+      slug,
+    },
+  });
+
+  if (tags) {
+    const validTags = tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "#" && tag !== "" && tag !== ",");
+
+    for (const tagName of validTags) {
+      let tag = await prisma.tag.findUnique({
+        where: { name: tagName },
+      });
+
+      if (!tag) {
+        tag = await prisma.tag.create({ data: { name: tagName } });
+      }
+
+      await prisma.blogTag.create({
+        data: { blogId: blog.id, tagId: tag.id },
+      });
+    }
+  }
+
+  return { status: true, message: "blog updated successfully", blog };
+};
+
 export const getBlogs = async (page: number = 1, pagesize: number = 10) => {
   const blogs = await prisma.blog.findMany({
     skip: (page - 1) * pagesize,
@@ -183,6 +232,38 @@ export const getBlogBySlug = async (slug: string) => {
   const blog = await prisma.blog.findFirst({
     where: {
       slug,
+    },
+    include: {
+      user: {
+        select: {
+          fullName: true,
+          username: true,
+          image: true,
+          updatedAt: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+              blogs: true,
+            },
+          },
+        },
+      },
+      likes: true,
+      saves: true,
+    },
+  });
+
+  return { success: blog ? true : false, blog: blog ?? null };
+};
+
+export const getBlogById = async (id: string) => {
+  const blog = await prisma.blog.findFirst({
+    where: {
+      id,
     },
     include: {
       user: {

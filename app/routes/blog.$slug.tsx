@@ -1,7 +1,9 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Heart } from "lucide-react";
+import { Heart, MoreVertical } from "lucide-react";
 import { DisplayBlog, LikeBlogRequest } from "utils/types";
+import { BlogActions } from "~/components/blog-actions";
+import { Button } from "~/components/ui/button";
 import { getBlogBySlug, likeBlogPost } from "~/db.server";
 import { dateToWords } from "~/lib/utils";
 
@@ -59,7 +61,14 @@ const BlogDisplayPage = () => {
             <p>{blog.user.username}</p>
             <p className="text-xs flex gap-2 justify-between w-full">
               <span>{blog.user.fullName}</span>
-              <span>Posted on {dateToWords(blog.createdAt.split("T")[0])}</span>
+              <span className="flex gap-3">
+                <span>
+                  Posted on {dateToWords(blog.createdAt.split("T")[0])}
+                </span>
+                <BlogActions blogId={blog.id}>
+                  <MoreVertical className="size-4" />
+                </BlogActions>
+              </span>
             </p>
           </div>
         </div>

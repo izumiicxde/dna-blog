@@ -50,7 +50,7 @@ export default function Index() {
   } = useLoaderData<typeof loader>();
 
   return (
-    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10  lg:pr-40">
+    <div className="w-screen overflow-x-hidden h-auto flex gap-2 items-start px-2 py-10  lg:pr-40 ">
       <div className="w-60 hidden lg:flex flex-col py-5 ">
         <IndexSidebar authenticated={authenticated} />
       </div>

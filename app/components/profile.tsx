@@ -15,6 +15,8 @@ import { useUserStore } from "utils/store";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { uploadFileToServer } from "utils/uploadthing";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import AvatarComponent from "./avatar";
 
 const Profile = () => {
   const fetcher = useFetcher();
@@ -80,13 +82,8 @@ const Profile = () => {
         onOpenChange={() => setOpenSheet((prev) => !prev)}
       >
         <SheetTrigger>
-          {" "}
           {user?.image ? (
-            <img
-              src={user?.image}
-              alt=""
-              className="cursor-pointer rounded-full size-9"
-            />
+            <AvatarComponent fallback={user.username} url={user.image} />
           ) : (
             <div className="size-9 bg-black rounded-full cursor-pointer" />
           )}
@@ -101,10 +98,9 @@ const Profile = () => {
               >
                 <Label htmlFor="avatar">
                   {user?.image ? (
-                    <img
-                      src={user?.image}
-                      alt=""
-                      className="cursor-pointer size-9 rounded-full"
+                    <AvatarComponent
+                      fallback={user.username}
+                      url={user.image}
                     />
                   ) : (
                     <div className="size-9 bg-black rounded-full cursor-pointer" />
@@ -121,7 +117,7 @@ const Profile = () => {
               </Button>
 
               <div className="flex flex-col pl-1 justify-start">
-                <p className="text-sm"> {user?.username}</p>
+                <p className="text-sm "> {user?.username}</p>
                 <p className="text-xs text-gray-500">{user?.fullName}</p>
               </div>
             </SheetTitle>
@@ -135,7 +131,7 @@ const Profile = () => {
                     <Button
                       key={blog.id}
                       variant={"ghost"}
-                      className="text-sm text-left flex justify-start line-clamp-1 p-0 lg:p-2"
+                      className="text-sm text-left flex justify-start truncate max-w-xl p-0 lg:p-2"
                       asChild
                     >
                       <Link
