@@ -33,7 +33,7 @@ const Navbar = ({ success }: { success: boolean }) => {
               </Button>
 
               <Profile>
-                <div className="size-9 rounded-full bg-black cursor-pointer" />
+                {/* <div className="size-9 rounded-full bg-black cursor-pointer" /> */}
               </Profile>
             </>
           ) : (

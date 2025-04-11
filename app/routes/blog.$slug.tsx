@@ -72,7 +72,7 @@ const BlogDisplayPage = () => {
           />
         )}
         <h2 className="text-5xl font-black pt-10">{blog?.title}</h2>
-        <p className="flex gap-1.5 text-xs pt-2.5">
+        <p className="flex gap-1.5 text-xs pt-2.5 select-none">
           {blog.tags && blog.tags.map((tag) => <span>{tag.tag.name}</span>)}
         </p>
 
