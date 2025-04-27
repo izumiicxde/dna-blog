@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { loginSchema } from "utils/user.schema";
 import { z } from "zod";
 import { Form } from "~/components/ui/form";
-import { authenticator } from "~/services/auth.server";
 import {
   getUserFromSession,
   getUserSession,

@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import PreviewHTML from "~/components/previewHTML";
-import BlogCreateForm from "~/components/blog-create-form";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
 import { getUserFromSession } from "~/services/session.server";
-import { createBlog, getBlogById, updateBlog } from "~/db.server";
-import { blogSchema, BlogSchema } from "utils/blog.schema";
+import { getBlogById, updateBlog } from "~/db.server";
+import { BlogSchema } from "utils/blog.schema";
 import { useLoaderData } from "@remix-run/react";
 import { BlogUpdateForm } from "~/components/blog-update-form";
 import { useBlogContentStore } from "utils/store";

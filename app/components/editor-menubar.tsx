@@ -135,13 +135,6 @@ export const MenuBar = () => {
     },
   ];
 
-  const addImage = useCallback(() => {
-    const url = window.prompt("URL");
-
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
   return (
     <div className="  sticky top-16 py-4 bg-white z-30 ">
       <div className="flex flex-wrap gap-3 px-2">

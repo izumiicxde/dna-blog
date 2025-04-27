@@ -3,19 +3,17 @@ import { Button } from "./ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { ProfileUser, UserResponse } from "utils/types";
+import { UserResponse } from "utils/types";
 import { useUserStore } from "utils/store";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { uploadFileToServer } from "utils/uploadthing";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import AvatarComponent from "./avatar";
 
 const Profile = () => {

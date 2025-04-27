@@ -8,13 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { json, Link, useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { toast } from "sonner";
-
-type DeleteBlogResponse = {
-  message: string;
-  status: boolean;
-};
 
 export const BlogActions = ({
   children,

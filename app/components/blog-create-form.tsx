@@ -6,10 +6,8 @@ import Editor from "./editor";
 import { UploadButton } from "utils/uploadthing";
 import { toast } from "sonner";
 import { useFetcher, useNavigate } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { blogSchema } from "utils/blog.schema";
-import { z } from "zod";
-import { useState } from "react";
 
 const BlogCreateForm = () => {
   const fetcher = useFetcher();
@@ -81,7 +79,7 @@ const BlogCreateForm = () => {
                   Remove
                 </Button>
               </div>
-              <img src={content.coverImage} className="w-fit max-w-sm" />
+              <img src={content.coverImage} alt="" className="w-fit max-w-sm" />
             </div>
           )}
         </div>
@@ -168,7 +166,7 @@ const UploadImageButton = ({
           });
         }
       }}
-      onUploadError={(error: Error) => {
+      onUploadError={() => {
         toast("something went wrong, please try again.");
       }}
     />

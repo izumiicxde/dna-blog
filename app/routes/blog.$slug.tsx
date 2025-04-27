@@ -1,9 +1,9 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { Heart, MoreVertical } from "lucide-react";
-import { DisplayBlog, LikeBlogRequest } from "utils/types";
+import { useLoaderData } from "@remix-run/react";
+import { MoreVertical } from "lucide-react";
+import { DisplayBlog } from "utils/types";
 import { BlogActions } from "~/components/blog-actions";
-import { deleteBlogPost, getBlogBySlug, likeBlogPost } from "~/db.server";
+import { deleteBlogPost, getBlogBySlug } from "~/db.server";
 import { dateToWords } from "~/lib/utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

@@ -7,10 +7,8 @@ import { UploadButton } from "utils/uploadthing";
 import { toast } from "sonner";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
-import { BlogSchema, blogSchema } from "utils/blog.schema";
-import { z } from "zod";
+import { blogSchema } from "utils/blog.schema";
 import { useState } from "react";
-import { Blog } from "@prisma/client";
 import { DisplayBlog } from "utils/types";
 
 export const BlogUpdateForm = ({ blog }: { blog: DisplayBlog }) => {
@@ -82,7 +80,7 @@ export const BlogUpdateForm = ({ blog }: { blog: DisplayBlog }) => {
                   Remove
                 </Button>
               </div>
-              <img src={content.coverImage} className="w-fit max-w-sm" />
+              <img src={content.coverImage} alt="" className="w-fit max-w-sm" />
             </div>
           )}
         </div>
@@ -167,7 +165,7 @@ const UploadImageButton = ({
           });
         }
       }}
-      onUploadError={(error: Error) => {
+      onUploadError={() => {
         toast("something went wrong, please try again.");
       }}
     />

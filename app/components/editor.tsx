@@ -72,15 +72,15 @@ const Editor = () => {
       event.dataTransfer.files[0]
     ) {
       toast("uploading image please wait");
-      let file = event.dataTransfer.files[0];
-      let filesize = (file.size / 1024 / 1024).toFixed(4);
+      const file = event.dataTransfer.files[0];
+      const filesize = (file.size / 1024 / 1024).toFixed(4);
 
       if (
         (file.type === "image/jpeg" || file.type === "image/png") &&
         parseFloat(filesize) < 10
       ) {
-        let _URL = window.URL || window.webkitURL;
-        let img = document.createElement("img"); // Fixes the `new Image()` error
+        const _URL = window.URL || window.webkitURL;
+        const img = document.createElement("img"); // Fixes the `new Image()` error
         img.src = _URL.createObjectURL(file);
 
         img.onload = async function () {

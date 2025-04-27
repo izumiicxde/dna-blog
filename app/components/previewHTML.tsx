@@ -8,7 +8,6 @@ const PreviewHTML = () => {
         {content.coverImage && (
           <img
             src={content.coverImage}
-            alt="cover image"
             className="w-full max-h-96 object-cover object-center "
           />
         )}

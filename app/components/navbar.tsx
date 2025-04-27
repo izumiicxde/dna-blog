@@ -1,7 +1,5 @@
 import { Link } from "@remix-run/react";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Search } from "lucide-react";
 import Profile from "./profile";
 
 const Navbar = ({ success }: { success: boolean }) => {

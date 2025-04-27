@@ -1,4 +1,4 @@
-import { Bookmark, Heart, User } from "lucide-react";
+import { Bookmark, Heart } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Link } from "@remix-run/react";
 import { DisplayBlog } from "utils/types";

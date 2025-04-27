@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useFetcher,
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
