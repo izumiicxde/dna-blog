@@ -141,10 +141,13 @@ export const createBlog = async (BlogData: BlogSchema) => {
   return { status: true, message: "blog created successfully", blog };
 };
 
-export const updateBlog = async (id: string, BlogData: BlogSchema) => {
+export const updateBlog = async (
+  userId: string,
+  blogId: string,
+  BlogData: BlogSchema
+) => {
   const { success, data, error } = blogSchema.safeParse(BlogData);
   if (!success) throw Error(JSON.stringify(error.flatten().fieldErrors));
-  if (!data.userId) throw Error("unauthorized");
 
   const { title, body, coverImage, tags } = data;
   const slug = slugify(title, {
@@ -155,13 +158,14 @@ export const updateBlog = async (id: string, BlogData: BlogSchema) => {
 
   const blog = await prisma.blog.update({
     where: {
-      id,
+      id: blogId,
+      userId,
     },
     data: {
       title,
       body,
       coverImage,
-      userId: data.userId,
+      userId,
       slug,
     },
   });
@@ -180,10 +184,18 @@ export const updateBlog = async (id: string, BlogData: BlogSchema) => {
       if (!tag) {
         tag = await prisma.tag.create({ data: { name: tagName } });
       }
-
-      await prisma.blogTag.create({
-        data: { blogId: blog.id, tagId: tag.id },
+      const existingBlogTag = await prisma.blogTag.findUnique({
+        where: {
+          blogId_tagId: {
+            blogId: blogId,
+            tagId: tag.id,
+          },
+        },
       });
+      if (!existingBlogTag)
+        await prisma.blogTag.create({
+          data: { blogId: blog.id, tagId: tag.id },
+        });
     }
   }
 
@@ -290,6 +302,20 @@ export const getBlogById = async (id: string) => {
   });
 
   return { success: blog ? true : false, blog: blog ?? null };
+};
+
+export const deleteBlogPost = async (blogId: string) => {
+  try {
+    await prisma.blogTag.deleteMany({ where: { blogId } });
+    await prisma.blog.delete({ where: { id: blogId } });
+    return { message: "Blog deleted successfully", status: true };
+  } catch (error) {
+    return {
+      message:
+        error instanceof Error ? error.message : "failed to delete message",
+      status: false,
+    };
+  }
 };
 
 export const likeBlogPost = async (req: LikeBlogRequest) => {};

@@ -8,22 +8,25 @@ import {
   redirect,
 } from "@remix-run/node";
 import { getUserFromSession } from "~/services/session.server";
-import { createBlog, getBlogById } from "~/db.server";
+import { createBlog, getBlogById, updateBlog } from "~/db.server";
 import { blogSchema, BlogSchema } from "utils/blog.schema";
 import { useLoaderData } from "@remix-run/react";
 import { BlogUpdateForm } from "~/components/blog-update-form";
 import { useBlogContentStore } from "utils/store";
 import { Tag } from "utils/types";
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   try {
+    const { blogId } = params;
+    if (!blogId) throw Error("blog id required");
+
     const userId = await getUserFromSession(request);
     if (!userId) throw Error("unauthorized");
 
     const body: BlogSchema = await request.json();
     if (!body) throw Error("invalid request body");
 
-    const response = await createBlog({ ...body, userId: userId });
+    const response = await updateBlog(userId, blogId, body);
 
     return Response.json(
       {

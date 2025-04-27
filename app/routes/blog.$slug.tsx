@@ -1,10 +1,9 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { Heart, MoreVertical } from "lucide-react";
 import { DisplayBlog, LikeBlogRequest } from "utils/types";
 import { BlogActions } from "~/components/blog-actions";
-import { Button } from "~/components/ui/button";
-import { getBlogBySlug, likeBlogPost } from "~/db.server";
+import { deleteBlogPost, getBlogBySlug, likeBlogPost } from "~/db.server";
 import { dateToWords } from "~/lib/utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -25,11 +24,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const req: LikeBlogRequest = await request.json();
-  if (!req)
-    return Response.json({ message: "invalid request" }, { status: 400 });
+  if (request.method === "DELETE") {
+    const { blogId } = await request.json();
+    if (!blogId) throw Error("invalid blog id");
 
-  const res = await likeBlogPost(req);
+    const response = await deleteBlogPost(blogId);
+    if (response.status)
+      return Response.json(
+        { message: "blog deleted successfully" },
+        { status: 200 }
+      );
+    else
+      return Response.json(
+        { message: "failed to delete blog" },
+        { status: 500 }
+      );
+  }
 }
 
 const BlogDisplayPage = () => {
@@ -41,6 +51,7 @@ const BlogDisplayPage = () => {
 
   const { success, blog, message }: LoaderResponse =
     useLoaderData<typeof loader>();
+
   if (!success)
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -65,7 +76,7 @@ const BlogDisplayPage = () => {
                 <span>
                   Posted on {dateToWords(blog.createdAt.split("T")[0])}
                 </span>
-                <BlogActions blogId={blog.id}>
+                <BlogActions blogId={blog.id} slug={blog.slug}>
                   <MoreVertical className="size-4" />
                 </BlogActions>
               </span>
@@ -80,15 +91,21 @@ const BlogDisplayPage = () => {
             className="w-full h-auto max-h-80 object-cover object-center rounded-sm mt-5"
           />
         )}
-        <h2 className="text-5xl font-black pt-10">{blog?.title}</h2>
+        <h2 className="text-5xl font-black pt-10 break-words max-w-full">
+          {blog?.title}
+        </h2>
+
         <p className="flex gap-1.5 text-xs pt-2.5 select-none">
-          {blog.tags && blog.tags.map((tag) => <span>{tag.tag.name}</span>)}
+          {blog.tags &&
+            blog.tags.map((tag) => (
+              <span key={tag.tag.name}>{tag.tag.name}</span>
+            ))}
         </p>
 
         <div
-          className=" prose-sm w-full content-preview  pt-10"
+          className="prose-sm w-full content-preview pt-10 break-words max-w-full overflow-hidden"
           dangerouslySetInnerHTML={{ __html: blog.body }}
-        ></div>
+        />
       </div>
     </>
   );

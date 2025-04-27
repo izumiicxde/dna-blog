@@ -60,18 +60,6 @@ export const BlogUpdateForm = ({ blog }: { blog: DisplayBlog }) => {
     }
   }, [fetcher.data]);
 
-  // useEffect(() => {
-  //   if (blog && !initialized) {
-  //     console.log("updating", blog);
-  //     setContent({
-  //       title: blog.title,
-  //       body: blog.body,
-  //       coverImage: blog.coverImage,
-  //       tags: blog.tags.map((tag) => tag.tag.name).join(","),
-  //     });
-  //   }
-  // }, [blog, initialized]);
-
   return (
     <Card className="w-full lg:mt-10 h-auto shadow-none border-none">
       <CardHeader>
