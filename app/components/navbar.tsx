@@ -11,7 +11,7 @@ const Navbar = ({ success }: { success: boolean }) => {
         <Link to={"/"}>
           <img src="/logo.svg" alt="logo" className="w-16" />
         </Link>
-        {success && (
+        {/* {success && (
           <div className="hidden md:flex items-center border border-black px-2 rounded-md ">
             <>
               <Search className="size-4 group" />
@@ -21,7 +21,7 @@ const Navbar = ({ success }: { success: boolean }) => {
               />
             </>
           </div>
-        )}
+        )} */}
       </div>
 
       <div className="flex gap-4 items-center">
