@@ -3,10 +3,10 @@ import { useLoaderData } from "@remix-run/react";
 import { MoreVertical } from "lucide-react";
 import { DisplayBlog } from "utils/types";
 import { BlogActions } from "~/components/blog-actions";
-import { deleteBlogPost, getBlogBySlug } from "~/db.server";
+import { deleteBlogPost, getBlogBySlug, likeUnlikeBlogPost } from "~/db.server";
 import { dateToWords } from "~/lib/utils";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   try {
     const slug = params.slug;
     if (!slug) throw Error("slug not found");
@@ -39,6 +39,12 @@ export async function action({ request }: ActionFunctionArgs) {
         { message: "failed to delete blog" },
         { status: 500 }
       );
+  } else if (request.method === "POST") {
+    const { blogId, userId, intent } = await request.json();
+    if (intent === "like") {
+      const response = await likeUnlikeBlogPost(userId, blogId);
+      return Response.json({ status: response.status });
+    }
   }
 }
 

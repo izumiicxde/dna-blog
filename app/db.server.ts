@@ -83,6 +83,7 @@ export const getUser = async (request: Request) => {
   const user = await prisma.user.findFirst({
     where: { id: userId },
     select: {
+      id: true,
       email: true,
       fullName: true,
       image: true,
@@ -318,4 +319,31 @@ export const deleteBlogPost = async (blogId: string) => {
   }
 };
 
-export const likeBlogPost = async (req: LikeBlogRequest) => {};
+export const likeUnlikeBlogPost = async (userId: string, blogId: string) => {
+  const existingLike = await prisma.like.findUnique({
+    where: {
+      userId_blogId: {
+        userId,
+        blogId,
+      },
+    },
+  });
+
+  if (existingLike) {
+    await prisma.like.delete({
+      where: {
+        id: existingLike.id,
+      },
+    });
+    return { status: true };
+  } else {
+    // not liked yet, so like it (create)
+    await prisma.like.create({
+      data: {
+        userId,
+        blogId,
+      },
+    });
+    return { status: true };
+  }
+};

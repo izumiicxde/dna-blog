@@ -1,3 +1,5 @@
+import { Like, Save } from "@prisma/client";
+
 export interface DisplayBlog {
   id: string;
   title: string;
@@ -9,8 +11,8 @@ export interface DisplayBlog {
   updatedAt: string;
   user: User;
   tags: Tag[];
-  likes: any[];
-  saves: any[];
+  likes: Like[];
+  saves: Save[];
 }
 
 export interface User {
@@ -43,6 +45,7 @@ export type UserResponse = {
   user: ProfileUser;
 };
 export interface ProfileUser {
+  id: string;
   email: string;
   fullName: string;
   image: any;
