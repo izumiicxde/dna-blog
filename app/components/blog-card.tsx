@@ -21,11 +21,7 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
             url={blog.user.image}
           />
           <div className="">
-            <p className="text-sm cursor-pointer">
-              <Link to={user ? `/user/${blog.user.username}` : "/login"}>
-                {blog.user.username}
-              </Link>
-            </p>
+            <p className="text-sm cursor-pointer">{blog.user.username}</p>
             <p className="text-xs">{blog.user.fullName}</p>
           </div>
         </div>

@@ -15,6 +15,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { uploadFileToServer } from "utils/uploadthing";
 import AvatarComponent from "./avatar";
+import { PenLine } from "lucide-react";
 
 const Profile = () => {
   const fetcher = useFetcher();
@@ -91,9 +92,12 @@ const Profile = () => {
             <SheetTitle className="flex gap-1  items-center select-none">
               <Button
                 variant={"ghost"}
-                className="hover:bg-none rounded-full"
+                className="hover:bg-none rounded-full relative overflow-hidden group"
                 size={"icon"}
               >
+                <div className="absolute w-full h-full bg-black/20 z-30 hidden group-hover:flex justify-center items-center backdrop-blur-sm">
+                  <PenLine className="size-3" />
+                </div>
                 <Label htmlFor="avatar">
                   {user?.image ? (
                     <AvatarComponent

@@ -59,6 +59,10 @@ const EditBlog = () => {
   const { blog, success } = useLoaderData<typeof loader>();
   const { content, setContent, clearContent } = useBlogContentStore();
 
+  useEffect(() => {
+    if (success) clearContent();
+  }, [success]);
+
   if (!success)
     return (
       <div className="w-full h-full flex justify-center items-center">

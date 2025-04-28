@@ -11,7 +11,7 @@ const AvatarComponent = ({
   className?: string;
 }) => {
   return (
-    <Avatar className="w-fit h-full flex justify-center items-center">
+    <Avatar className="w-fit h-full size-10 flex justify-center items-center ">
       <AvatarImage src={url} className={cn("size-9 rounded-full", className)} />
       <AvatarFallback className="text-xs">{fallback}</AvatarFallback>
     </Avatar>
