@@ -17,7 +17,7 @@ export const sidebarLinks = [
   // { text: "Forem Shop", link: "/shop", emoji: "🛍️" },
   // { text: "DEV Challenges", link: "/challenges", emoji: "🏆" },
   { text: "About", link: "/about", emoji: "😎" },
-  { text: "Contact", link: "/contact", emoji: "📞" },
+  // { text: "Contact", link: "/contact", emoji: "📞" },
 ];
 
 export const socials = [
