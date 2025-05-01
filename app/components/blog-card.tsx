@@ -7,14 +7,17 @@ import { useEffect, useRef, useState } from "react";
 import AvatarComponent from "./avatar";
 import { useUserStore } from "utils/store";
 import { toast } from "sonner";
-import { debounce } from "utils/debounce";
 
 const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
   const { user } = useUserStore();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(blog.likes.length ?? 0);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saveCount, setSaveCount] = useState(blog.saves.length ?? 0);
 
   const handleBlogLike = async () => {
+    setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
     try {
       const response = await fetch(`/blog/${blog.slug}`, {
         method: "POST",
@@ -27,10 +30,6 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
           userId: user?.id,
         }),
       });
-      if (response.ok) {
-        setIsLiked((prev) => !prev);
-        setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-      }
     } catch (error) {
       toast(
         error instanceof Error
@@ -40,8 +39,33 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
     }
   };
 
+  const handleBlogSave = async () => {
+    setIsSaved((prev) => !prev);
+    setSaveCount((prev) => (isSaved ? prev - 1 : prev + 1));
+    try {
+      const response = await fetch(`/blog/${blog.slug}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          intent: "save",
+          blogId: blog.id,
+          userId: user?.id,
+        }),
+      });
+    } catch (error) {
+      toast(
+        error instanceof Error
+          ? error.message
+          : "failed to save, check your connection"
+      );
+    }
+  };
+
   useEffect(() => {
     setIsLiked(blog.likes.some((like) => like.userId === user?.id));
+    setIsSaved(blog.saves.some((save) => save.userId === user?.id));
   }, [blog.likes, user?.id]);
 
   return (
@@ -70,7 +94,7 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
           </p>
         </Link>
       </CardContent>
-      <CardFooter className="flex justify-between gap-5 text-xs">
+      <CardFooter className="flex justify-between gap-5 text-xs select-none">
         <div className="flex gap-5 select-none">
           <p className="flex gap-1 text-xs justify-center items-center">
             <Heart
@@ -80,8 +104,13 @@ const BlogCard = ({ blog }: { blog: DisplayBlog }) => {
             {likeCount}
           </p>
           <p className="flex gap-1 text-xs justify-center items-center">
-            <Bookmark className="size-5" />
-            {blog.saves?.length ?? 0}
+            <Bookmark
+              className={`size-5 ${
+                isSaved ? "fill-blue-700 stroke-blue-700" : ""
+              }`}
+              onClick={() => user && handleBlogSave()}
+            />
+            {saveCount}
           </p>
         </div>
         <p className="text-xs">{dateToWords(blog.createdAt.split("T")[0])}</p>

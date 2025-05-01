@@ -95,7 +95,7 @@ const Profile = () => {
                 className="hover:bg-none rounded-full relative overflow-hidden group"
                 size={"icon"}
               >
-                <div className="absolute w-full h-full bg-black/20 z-30 hidden group-hover:flex justify-center items-center backdrop-blur-sm">
+                <div className="absolute w-full h-full bg-black/20 z-30 hidden group-hover:flex justify-center items-center backdrop-blur-sm pointer-events-none ">
                   <PenLine className="size-3" />
                 </div>
                 <Label htmlFor="avatar">
@@ -105,7 +105,7 @@ const Profile = () => {
                       url={user.image}
                     />
                   ) : (
-                    <div className="size-9 bg-black rounded-full cursor-pointer" />
+                    <div className="size-9 bg-red-500 rounded-full cursor-pointer" />
                   )}
                 </Label>
                 <Input

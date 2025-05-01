@@ -347,3 +347,31 @@ export const likeUnlikeBlogPost = async (userId: string, blogId: string) => {
     return { status: true };
   }
 };
+
+export const saveUnsaveBlogPost = async (userId: string, blogId: string) => {
+  const existingSave = await prisma.save.findUnique({
+    where: {
+      userId_blogId: {
+        userId,
+        blogId,
+      },
+    },
+  });
+
+  if (existingSave) {
+    await prisma.save.delete({
+      where: {
+        id: existingSave.id,
+      },
+    });
+    return { status: true };
+  } else {
+    await prisma.save.create({
+      data: {
+        userId,
+        blogId,
+      },
+    });
+    return { status: true };
+  }
+};

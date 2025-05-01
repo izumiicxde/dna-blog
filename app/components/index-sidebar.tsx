@@ -21,7 +21,7 @@ const IndexSidebar = ({ authenticated }: { authenticated: boolean }) => {
         {socials?.map((social) => (
           <Link
             to={social.link}
-            key={social.link}
+            key={social.name}
             className="p-2 hover:bg-blue-300/20 hover:text-blue-500 rounded-lg"
           >
             {<social.icon className="size-6" />}

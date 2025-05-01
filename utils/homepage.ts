@@ -9,13 +9,7 @@ import {
 export const sidebarLinks = [
   { text: "Home", link: "/", emoji: "🏠" },
   { text: "Create", link: "/blog/create", emoji: "📰" },
-  // { text: "DEV++", link: "/dev-plus-plus", emoji: "🎮" },
-  // { text: "Podcasts", link: "/podcasts", emoji: "🎙️" },
-  // { text: "Videos", link: "/videos", emoji: "🎥" },
-  // { text: "Tags", link: "/tags", emoji: "🏷️" },
-  // { text: "DEV Help", link: "/help", emoji: "💡" },
-  // { text: "Forem Shop", link: "/shop", emoji: "🛍️" },
-  // { text: "DEV Challenges", link: "/challenges", emoji: "🏆" },
+  { text: "Saves", link: "/user/saves", emoji: "🔖" },
   { text: "About", link: "/about", emoji: "😎" },
   // { text: "Contact", link: "/contact", emoji: "📞" },
 ];
@@ -24,31 +18,31 @@ export const socials = [
   {
     name: "Facebook",
     icon: Facebook,
-    link: "/socials/facebook",
+    link: "#",
   },
   {
     name: "Instagram",
     icon: Instagram,
-    link: "/socials/insta",
+    link: "#",
   },
   {
     name: "LinkedIn",
     icon: Linkedin,
-    link: "/socials/linkedin",
+    link: "#",
   },
   {
     name: "Twitter",
     icon: Twitter,
-    link: "/socials/twitter",
+    link: "#",
   },
   {
     name: "Twitch",
     icon: Twitch,
-    link: "/socials/twitch",
+    link: "#",
   },
   {
     name: "GitHub",
     icon: Github,
-    link: "/socials/github",
+    link: "#",
   },
 ];

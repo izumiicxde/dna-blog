@@ -1,5 +1,12 @@
 import { prisma } from "./db.server";
 
+export const getUserByUsername = async (username: string) => {
+  const user = await prisma.user.findUnique({ where: { username } });
+
+  if (!user) return { status: false, user: null };
+  return { status: true, user };
+};
+
 export const updateUserAvatar = async ({
   userId,
   url,

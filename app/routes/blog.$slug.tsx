@@ -3,7 +3,12 @@ import { useLoaderData } from "@remix-run/react";
 import { MoreVertical } from "lucide-react";
 import { DisplayBlog } from "utils/types";
 import { BlogActions } from "~/components/blog-actions";
-import { deleteBlogPost, getBlogBySlug, likeUnlikeBlogPost } from "~/db.server";
+import {
+  deleteBlogPost,
+  getBlogBySlug,
+  likeUnlikeBlogPost,
+  saveUnsaveBlogPost,
+} from "~/db.server";
 import { dateToWords } from "~/lib/utils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -44,6 +49,13 @@ export async function action({ request }: ActionFunctionArgs) {
     if (intent === "like") {
       const response = await likeUnlikeBlogPost(userId, blogId);
       return Response.json({ status: response.status });
+    } else if (intent === "save") {
+      const response = await saveUnsaveBlogPost(userId, blogId);
+      return new Response(JSON.stringify(response), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   }
 }
