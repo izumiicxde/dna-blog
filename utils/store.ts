@@ -49,7 +49,7 @@ export const useBlogContentStore = create<EditorContentStore>()(
       initialized: false,
       setContent: (content: BlogSchema) => set({ content }),
       clearContent: () => {
-        set({ content: initialBlogContent });
+        set({ content: { ...initialBlogContent } });
       },
     }),
     {

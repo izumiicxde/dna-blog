@@ -211,6 +211,7 @@ export const getBlogs = async (page: number = 1, pagesize: number = 10) => {
     include: {
       user: {
         select: {
+          id: true,
           fullName: true,
           image: true,
           username: true,
@@ -249,6 +250,7 @@ export const getBlogBySlug = async (slug: string) => {
     include: {
       user: {
         select: {
+          id: true,
           fullName: true,
           username: true,
           image: true,
@@ -281,6 +283,7 @@ export const getBlogById = async (id: string) => {
     include: {
       user: {
         select: {
+          id: true,
           fullName: true,
           username: true,
           image: true,

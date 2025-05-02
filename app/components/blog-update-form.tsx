@@ -9,13 +9,22 @@ import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 import { blogSchema } from "utils/blog.schema";
 import { useState } from "react";
-import { DisplayBlog } from "utils/types";
+import { DisplayBlog, Tag } from "utils/types";
 
 export const BlogUpdateForm = ({ blog }: { blog: DisplayBlog }) => {
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const { content, setContent, clearContent } = useBlogContentStore();
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+
+  useEffect(() => {
+    setContent({
+      title: blog.title,
+      body: blog.body,
+      coverImage: blog.coverImage,
+      tags: blog.tags.map((tag: Tag) => tag.tag.name).join(","),
+    });
+  }, []);
 
   const handleBlogSubmit = async () => {
     const validation = blogSchema.safeParse(content);
@@ -51,10 +60,12 @@ export const BlogUpdateForm = ({ blog }: { blog: DisplayBlog }) => {
       const data = fetcher.data as FetcherData;
       toast(
         data.message ||
-          (data.status ? "blog created successfully" : "blog creation failed")
+          (data.status ? "blog updated successfully" : "failed to update blog")
       );
-      clearContent();
-      navigate("/");
+      if (data.status) {
+        clearContent();
+        navigate("/");
+      }
     }
   }, [fetcher.data]);
 

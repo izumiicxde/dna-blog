@@ -124,7 +124,7 @@ const BlogCreateForm = () => {
         >
           {fetcher.state === "submitting" ? "Posting..." : "Post"}
         </Button>
-        <Button variant={"ghost"} onClick={clearContent}>
+        <Button variant={"ghost"} onClick={() => clearContent()}>
           Discard
         </Button>
       </CardFooter>

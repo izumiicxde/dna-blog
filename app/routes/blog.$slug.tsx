@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { MoreVertical } from "lucide-react";
+import { useUserStore } from "utils/store";
 import { DisplayBlog } from "utils/types";
 import { BlogActions } from "~/components/blog-actions";
 import {
@@ -66,6 +67,7 @@ const BlogDisplayPage = () => {
     blog: DisplayBlog;
     message: string;
   };
+  const { user } = useUserStore();
 
   const { success, blog, message }: LoaderResponse =
     useLoaderData<typeof loader>();
@@ -94,9 +96,11 @@ const BlogDisplayPage = () => {
                 <span>
                   Posted on {dateToWords(blog.createdAt.split("T")[0])}
                 </span>
-                <BlogActions blogId={blog.id} slug={blog.slug}>
-                  <MoreVertical className="size-4" />
-                </BlogActions>
+                {user?.id === blog.user.id && (
+                  <BlogActions blogId={blog.id} slug={blog.slug}>
+                    <MoreVertical className="size-4" />
+                  </BlogActions>
+                )}
               </span>
             </p>
           </div>

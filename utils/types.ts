@@ -16,6 +16,7 @@ export interface DisplayBlog {
 }
 
 export interface User {
+  id: string;
   fullName: string;
   username: string;
   image: any;

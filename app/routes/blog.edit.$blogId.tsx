@@ -59,10 +59,6 @@ const EditBlog = () => {
   const { blog, success } = useLoaderData<typeof loader>();
   const { content, setContent, clearContent } = useBlogContentStore();
 
-  useEffect(() => {
-    if (success) clearContent();
-  }, [success]);
-
   if (!success)
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -70,14 +66,6 @@ const EditBlog = () => {
       </div>
     );
 
-  useEffect(() => {
-    setContent({
-      title: blog.title,
-      body: blog.body,
-      coverImage: blog.coverImage,
-      tags: blog.tags.map((tag: Tag) => tag.tag.name).join(","),
-    });
-  }, [blog]);
   return (
     <div className="w-full h-full px-10 pb-10">
       <div className="pt-10 px-10 flex justify-between items-center">
