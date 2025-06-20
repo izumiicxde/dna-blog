@@ -63,14 +63,6 @@ Make sure you have the following installed:
 - Write, edit, and publish your blogs.
 - Explore blogs from other users and interact through likes and comments.
 
-## Contributing
-
-We welcome contributions! Feel free to fork the repo, create a feature branch, and submit a pull request.
-
 ## License
 
 This project is licensed under the MIT License.
-
-## Contact
-
-For any inquiries or support, reach out via [your email or social link].
