@@ -17,14 +17,14 @@ const IndexSidebar = ({ authenticated }: { authenticated: boolean }) => {
         ))}
       </div>
       {/* SOCIAL LINKS */}
-      <div className="flex gap-3 pt-10 flex-wrap">
+      <div className="grid grid-cols-3  pt-10">
         {socials?.map((social) => (
           <Link
             to={social.link}
             key={social.name}
-            className="p-2 hover:bg-blue-300/20 hover:text-blue-500 rounded-lg"
+            className=" hover:bg-blue-300/20 hover:text-blue-500 rounded-lg p-2"
           >
-            {<social.icon className="size-6" />}
+            {<social.icon className="size-5" />}
           </Link>
         ))}
       </div>
