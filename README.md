@@ -16,7 +16,7 @@ DNA Blog is a feature-rich blogging platform that allows users to write, publish
 - **Fullstack**: Remix, TailwindCSS
 - **Database**: PostgreSQL
 - **Authentication**: Session based auth
-- **Storage**: Cloudinary / Local file storage (for images)
+- **Storage**: Uploadthing / Local file storage (for images)
 
 ## Installation & Setup
 
